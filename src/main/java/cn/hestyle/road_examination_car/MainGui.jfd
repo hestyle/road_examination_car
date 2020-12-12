@@ -13,7 +13,7 @@ new FormModel {
 				"text": "ip地址："
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 90
-				"y": 55
+				"y": 30
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label2"
@@ -22,14 +22,14 @@ new FormModel {
 				"width": 70
 				"height": 15
 				"x": 90
-				"y": 105
+				"y": 70
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "ipAddressLabel"
 				"text": "text"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 165
-				"y": 55
+				"y": 30
 				"width": 150
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -39,19 +39,53 @@ new FormModel {
 				"width": 150
 				"height": 15
 				"x": 165
-				"y": 105
+				"y": 70
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label5"
-				"text": "正在等待连接.."
+				name: "tipsLabel"
+				"text": "提示：点击【启动TCP服务】按钮，启动服务器"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 130
-				"y": 170
-				"width": 130
+				"x": 45
+				"y": 200
+				"width": 285
+				"height": 40
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label6"
+				"text": "端口号："
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 90
+				"y": 110
+				"width": 55
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "portTextField"
+				"cursor": new java.awt.Cursor( 2 )
+				"text": "10101"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 165
+				"y": 110
+				"width": 125
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "startTcpButton"
+				"text": "启动TCP服务"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "startTcpButtonActionPerformed", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 60
+				"y": 155
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "stopTcpButton"
+				"text": "关闭TCP服务"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "stopTcpButtonActionPerformed", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 195
+				"y": 155
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 370, 275 )
+			"location": new java.awt.Point( 150, 95 )
+			"size": new java.awt.Dimension( 370, 285 )
 		} )
 	}
 }
