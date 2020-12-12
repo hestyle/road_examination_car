@@ -137,23 +137,13 @@ public class MainGui extends JFrame {
 
         //---- startTcpButton ----
         startTcpButton.setText("\u542f\u52a8TCP\u670d\u52a1");
-        startTcpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                startTcpButtonActionPerformed(e);
-            }
-        });
+        startTcpButton.addActionListener(e -> startTcpButtonActionPerformed(e));
         contentPane.add(startTcpButton);
         startTcpButton.setBounds(new Rectangle(new Point(60, 155), startTcpButton.getPreferredSize()));
 
         //---- stopTcpButton ----
         stopTcpButton.setText("\u5173\u95edTCP\u670d\u52a1");
-        stopTcpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                stopTcpButtonActionPerformed(e);
-            }
-        });
+        stopTcpButton.addActionListener(e -> stopTcpButtonActionPerformed(e));
         contentPane.add(stopTcpButton);
         stopTcpButton.setBounds(new Rectangle(new Point(195, 155), stopTcpButton.getPreferredSize()));
 
