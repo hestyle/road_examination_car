@@ -1,15 +1,32 @@
 package cn.hestyle.road_examination_car.server;
 
+import cn.hestyle.road_examination_car.message.BaseMessage;
 import cn.hestyle.road_examination_car.entity.MessageQueue;
 
-public class MessageHandler<T> extends Thread{
+import java.net.Socket;
+
+public class MessageHandler extends Thread{
     private static int count = 0;
     private boolean busy = false;
     private boolean stop = false;
-    private MessageQueue<T> messageQueue;
+    private MessageQueue messageQueue;
 
-    public MessageHandler(MessageQueue<T> messageQueue){
+    String targetIP;
+    Integer targetPort;
+    Socket socket;
+
+    public MessageHandler(MessageQueue messageQueue, String targetIP, Integer targetPort){
         this.messageQueue = messageQueue;
+        this.targetIP = targetIP;
+        this.targetPort = targetPort;
+        if(targetIP != null && targetIP != ""){
+            try {
+                socket = new Socket(targetIP, targetPort);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
 
         //与考试端建立连接
     }
@@ -28,10 +45,11 @@ public class MessageHandler<T> extends Thread{
     public void run() {
         System.out.println("按钮消息发送线程 start.");
         while(!stop) {
-            T message = messageQueue.getMessage();
+            BaseMessage message = messageQueue.getMessage();
             if(message != null) {
                 System.out.println(message);
-                // 向考试端发送数据
+                message.setSocket(socket);
+                message.execute();
             }
         }
         System.out.println(getName()+" end.");
