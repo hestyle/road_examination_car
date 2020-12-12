@@ -5,7 +5,10 @@
 package cn.hestyle.road_examination_car;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
+
+import static cn.hestyle.road_examination_car.GuiApp.messageQueue;
 
 /**
  * @author hestyle
@@ -15,17 +18,71 @@ public class CarGui extends JFrame {
         initComponents();
     }
 
+    private void radioButton_clutchPedalOnMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_clutchPedalOn.isEnabled()){
+            messageQueue.putMessage("踩离合踏板");
+            radioButton_clutchPedalOn.setEnabled(false);
+            radioButton_clutchPedalOff.setEnabled(true);
+        }
+    }
+
+    private void radioButton_clutchPedalOffMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_clutchPedalOff.isEnabled()){
+            messageQueue.putMessage("松开开合踏板");
+            radioButton_clutchPedalOn.setEnabled(true);
+            radioButton_clutchPedalOff.setEnabled(false);
+        }
+}
+
+    private void radioButton_brakePedalOnMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_brakePedalOn.isEnabled()){
+            messageQueue.putMessage("踩刹车踏板");
+            radioButton_brakePedalOn.setEnabled(false);
+            radioButton_brakePedalOff.setEnabled(true);
+        }
+    }
+
+    private void radioButton_brakePedalOffMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_brakePedalOff.isEnabled()){
+            messageQueue.putMessage("松开刹车踏板");
+            radioButton_brakePedalOn.setEnabled(true);
+            radioButton_brakePedalOff.setEnabled(false);
+        }
+    }
+
+    private void radioButton_acceleratorPedalLightOnMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_acceleratorPedalLightOn.isEnabled()){
+            messageQueue.putMessage("轻踩加速踏板");
+            radioButton_acceleratorPedalLightOn.setEnabled(false);
+            radioButton_acceleratorPedalOff.setEnabled(true);
+        }
+    }
+
+    private void radioButton_acceleratorPedalOffMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_acceleratorPedalOff.isEnabled()){
+            messageQueue.putMessage("松开加速踏板");
+            radioButton_acceleratorPedalLightOn.setEnabled(true);
+            radioButton_acceleratorPedalOff.setEnabled(false);
+        }
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         lightPanel = new JPanel();
-        radioButton1 = new JRadioButton();
-        radioButton2 = new JRadioButton();
-        radioButton3 = new JRadioButton();
-        radioButton4 = new JRadioButton();
-        radioButton5 = new JRadioButton();
-        radioButton6 = new JRadioButton();
-        radioButton7 = new JRadioButton();
-        radioButton8 = new JRadioButton();
+        radioButton_lightDippedOn = new JRadioButton();
+        radioButton_lightHighOn = new JRadioButton();
+        radioButton_lightHightDippedOn = new JRadioButton();
+        radioButton_lightTurnLeftSignalOn = new JRadioButton();
+        radioButton_lightTurnRightSignalOn = new JRadioButton();
+        radioButton_lightFogOn = new JRadioButton();
+        radioButton_lightOutLineMarkOn = new JRadioButton();
+        radioButton_lightHazardWarnOn = new JRadioButton();
         button1 = new JButton();
         gearPanel = new JPanel();
         radioButton9 = new JRadioButton();
@@ -37,14 +94,14 @@ public class CarGui extends JFrame {
         radioButton15 = new JRadioButton();
         pedalPanel = new JPanel();
         clutchPedalPanel = new JPanel();
-        radioButton16 = new JRadioButton();
-        radioButton17 = new JRadioButton();
+        radioButton_clutchPedalOn = new JRadioButton();
+        radioButton_clutchPedalOff = new JRadioButton();
         brakePedalPanel = new JPanel();
-        radioButton18 = new JRadioButton();
-        radioButton19 = new JRadioButton();
+        radioButton_brakePedalOn = new JRadioButton();
+        radioButton_brakePedalOff = new JRadioButton();
         acceleratorPedalPanel = new JPanel();
-        radioButton20 = new JRadioButton();
-        radioButton21 = new JRadioButton();
+        radioButton_acceleratorPedalLightOn = new JRadioButton();
+        radioButton_acceleratorPedalOff = new JRadioButton();
         steerWheelPanel = new JPanel();
         button2 = new JButton();
         button3 = new JButton();
@@ -68,45 +125,45 @@ public class CarGui extends JFrame {
             lightPanel.setName("\u706f\u5149");
             lightPanel.setLayout(null);
 
-            //---- radioButton1 ----
-            radioButton1.setText("\u8fd1\u5149\u706f");
-            lightPanel.add(radioButton1);
-            radioButton1.setBounds(new Rectangle(new Point(15, 65), radioButton1.getPreferredSize()));
+            //---- radioButton_lightDippedOn ----
+            radioButton_lightDippedOn.setText("\u8fd1\u5149\u706f");
+            lightPanel.add(radioButton_lightDippedOn);
+            radioButton_lightDippedOn.setBounds(new Rectangle(new Point(15, 65), radioButton_lightDippedOn.getPreferredSize()));
 
-            //---- radioButton2 ----
-            radioButton2.setText("\u8fdc\u5149\u706f");
-            lightPanel.add(radioButton2);
-            radioButton2.setBounds(new Rectangle(new Point(95, 65), radioButton2.getPreferredSize()));
+            //---- radioButton_lightHighOn ----
+            radioButton_lightHighOn.setText("\u8fdc\u5149\u706f");
+            lightPanel.add(radioButton_lightHighOn);
+            radioButton_lightHighOn.setBounds(new Rectangle(new Point(95, 65), radioButton_lightHighOn.getPreferredSize()));
 
-            //---- radioButton3 ----
-            radioButton3.setText("\u8fdc\u3001\u8fd1\u706f\u5149\u4ea4\u66ff\u95ea\u70c1");
-            lightPanel.add(radioButton3);
-            radioButton3.setBounds(new Rectangle(new Point(165, 65), radioButton3.getPreferredSize()));
+            //---- radioButton_lightHightDippedOn ----
+            radioButton_lightHightDippedOn.setText("\u8fdc\u3001\u8fd1\u706f\u5149\u4ea4\u66ff\u95ea\u70c1");
+            lightPanel.add(radioButton_lightHightDippedOn);
+            radioButton_lightHightDippedOn.setBounds(new Rectangle(new Point(165, 65), radioButton_lightHightDippedOn.getPreferredSize()));
 
-            //---- radioButton4 ----
-            radioButton4.setText("\u5de6\u8f6c\u706f");
-            lightPanel.add(radioButton4);
-            radioButton4.setBounds(new Rectangle(new Point(15, 15), radioButton4.getPreferredSize()));
+            //---- radioButton_lightTurnLeftSignalOn ----
+            radioButton_lightTurnLeftSignalOn.setText("\u5de6\u8f6c\u706f");
+            lightPanel.add(radioButton_lightTurnLeftSignalOn);
+            radioButton_lightTurnLeftSignalOn.setBounds(new Rectangle(new Point(15, 15), radioButton_lightTurnLeftSignalOn.getPreferredSize()));
 
-            //---- radioButton5 ----
-            radioButton5.setText("\u53f3\u8f6c\u706f");
-            lightPanel.add(radioButton5);
-            radioButton5.setBounds(new Rectangle(new Point(95, 15), radioButton5.getPreferredSize()));
+            //---- radioButton_lightTurnRightSignalOn ----
+            radioButton_lightTurnRightSignalOn.setText("\u53f3\u8f6c\u706f");
+            lightPanel.add(radioButton_lightTurnRightSignalOn);
+            radioButton_lightTurnRightSignalOn.setBounds(new Rectangle(new Point(95, 15), radioButton_lightTurnRightSignalOn.getPreferredSize()));
 
-            //---- radioButton6 ----
-            radioButton6.setText("\u96fe\u706f");
-            lightPanel.add(radioButton6);
-            radioButton6.setBounds(new Rectangle(new Point(15, 40), radioButton6.getPreferredSize()));
+            //---- radioButton_lightFogOn ----
+            radioButton_lightFogOn.setText("\u96fe\u706f");
+            lightPanel.add(radioButton_lightFogOn);
+            radioButton_lightFogOn.setBounds(new Rectangle(new Point(15, 40), radioButton_lightFogOn.getPreferredSize()));
 
-            //---- radioButton7 ----
-            radioButton7.setText("\u793a\u5eca\u706f");
-            lightPanel.add(radioButton7);
-            radioButton7.setBounds(new Rectangle(new Point(95, 40), radioButton7.getPreferredSize()));
+            //---- radioButton_lightOutLineMarkOn ----
+            radioButton_lightOutLineMarkOn.setText("\u793a\u5eca\u706f");
+            lightPanel.add(radioButton_lightOutLineMarkOn);
+            radioButton_lightOutLineMarkOn.setBounds(new Rectangle(new Point(95, 40), radioButton_lightOutLineMarkOn.getPreferredSize()));
 
-            //---- radioButton8 ----
-            radioButton8.setText("\u5371\u9669\u8b66\u62a5\u706f");
-            lightPanel.add(radioButton8);
-            radioButton8.setBounds(new Rectangle(new Point(165, 40), radioButton8.getPreferredSize()));
+            //---- radioButton_lightHazardWarnOn ----
+            radioButton_lightHazardWarnOn.setText("\u5371\u9669\u8b66\u62a5\u706f");
+            lightPanel.add(radioButton_lightHazardWarnOn);
+            radioButton_lightHazardWarnOn.setBounds(new Rectangle(new Point(165, 40), radioButton_lightHazardWarnOn.getPreferredSize()));
 
             //---- button1 ----
             button1.setText("\u5173\u95ed\u6240\u6709\u706f\u5149");
@@ -114,7 +171,7 @@ public class CarGui extends JFrame {
             button1.setBounds(new Rectangle(new Point(315, 35), button1.getPreferredSize()));
         }
         contentPane.add(lightPanel);
-        lightPanel.setBounds(300, 65, 435, 95);
+        lightPanel.setBounds(310, 65, 435, 95);
 
         //======== gearPanel ========
         {
@@ -155,8 +212,7 @@ public class CarGui extends JFrame {
             gearPanel.add(radioButton15);
             radioButton15.setBounds(new Rectangle(new Point(115, 50), radioButton15.getPreferredSize()));
 
-            {
-                // compute preferred size
+            { // compute preferred size
                 Dimension preferredSize = new Dimension();
                 for(int i = 0; i < gearPanel.getComponentCount(); i++) {
                     Rectangle bounds = gearPanel.getComponent(i).getBounds();
@@ -181,55 +237,91 @@ public class CarGui extends JFrame {
             {
                 clutchPedalPanel.setLayout(null);
 
-                //---- radioButton16 ----
-                radioButton16.setText("\u8e29\u4f4f");
-                clutchPedalPanel.add(radioButton16);
-                radioButton16.setBounds(new Rectangle(new Point(10, 10), radioButton16.getPreferredSize()));
+                //---- radioButton_clutchPedalOn ----
+                radioButton_clutchPedalOn.setText("\u8e29\u4f4f");
+                radioButton_clutchPedalOn.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        radioButton_clutchPedalOnMouseClicked(e);
+                    }
+                });
+                clutchPedalPanel.add(radioButton_clutchPedalOn);
+                radioButton_clutchPedalOn.setBounds(new Rectangle(new Point(10, 40), radioButton_clutchPedalOn.getPreferredSize()));
 
-                //---- radioButton17 ----
-                radioButton17.setText("\u677e\u5f00");
-                clutchPedalPanel.add(radioButton17);
-                radioButton17.setBounds(new Rectangle(new Point(10, 45), radioButton17.getPreferredSize()));
+                //---- radioButton_clutchPedalOff ----
+                radioButton_clutchPedalOff.setText("\u677e\u5f00");
+                radioButton_clutchPedalOff.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        radioButton_clutchPedalOffMouseClicked(e);
+                    }
+                });
+                clutchPedalPanel.add(radioButton_clutchPedalOff);
+                radioButton_clutchPedalOff.setBounds(new Rectangle(new Point(10, 70), radioButton_clutchPedalOff.getPreferredSize()));
             }
             pedalPanel.add(clutchPedalPanel);
-            clutchPedalPanel.setBounds(10, 10, 70, 75);
+            clutchPedalPanel.setBounds(10, 35, 95, 100);
 
             //======== brakePedalPanel ========
             {
                 brakePedalPanel.setLayout(null);
 
-                //---- radioButton18 ----
-                radioButton18.setText("\u8e29\u4f4f");
-                brakePedalPanel.add(radioButton18);
-                radioButton18.setBounds(new Rectangle(new Point(10, 10), radioButton18.getPreferredSize()));
+                //---- radioButton_brakePedalOn ----
+                radioButton_brakePedalOn.setText("\u8e29\u4f4f");
+                radioButton_brakePedalOn.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        radioButton_brakePedalOnMouseClicked(e);
+                    }
+                });
+                brakePedalPanel.add(radioButton_brakePedalOn);
+                radioButton_brakePedalOn.setBounds(new Rectangle(new Point(10, 40), radioButton_brakePedalOn.getPreferredSize()));
 
-                //---- radioButton19 ----
-                radioButton19.setText("\u677e\u5f00");
-                brakePedalPanel.add(radioButton19);
-                radioButton19.setBounds(new Rectangle(new Point(10, 45), radioButton19.getPreferredSize()));
+                //---- radioButton_brakePedalOff ----
+                radioButton_brakePedalOff.setText("\u677e\u5f00");
+                radioButton_brakePedalOff.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        radioButton_brakePedalOffMouseClicked(e);
+                    }
+                });
+                brakePedalPanel.add(radioButton_brakePedalOff);
+                radioButton_brakePedalOff.setBounds(new Rectangle(new Point(10, 70), radioButton_brakePedalOff.getPreferredSize()));
             }
             pedalPanel.add(brakePedalPanel);
-            brakePedalPanel.setBounds(80, 10, 70, 75);
+            brakePedalPanel.setBounds(110, 35, 95, 100);
 
             //======== acceleratorPedalPanel ========
             {
                 acceleratorPedalPanel.setLayout(null);
 
-                //---- radioButton20 ----
-                radioButton20.setText("\u8f7b\u8e29");
-                acceleratorPedalPanel.add(radioButton20);
-                radioButton20.setBounds(new Rectangle(new Point(10, 10), radioButton20.getPreferredSize()));
+                //---- radioButton_acceleratorPedalLightOn ----
+                radioButton_acceleratorPedalLightOn.setText("\u8f7b\u8e29");
+                radioButton_acceleratorPedalLightOn.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        radioButton_acceleratorPedalLightOnMouseClicked(e);
+                    }
+                });
+                acceleratorPedalPanel.add(radioButton_acceleratorPedalLightOn);
+                radioButton_acceleratorPedalLightOn.setBounds(new Rectangle(new Point(10, 40), radioButton_acceleratorPedalLightOn.getPreferredSize()));
 
-                //---- radioButton21 ----
-                radioButton21.setText("\u677e\u5f00");
-                acceleratorPedalPanel.add(radioButton21);
-                radioButton21.setBounds(new Rectangle(new Point(10, 45), radioButton21.getPreferredSize()));
+                //---- radioButton_acceleratorPedalOff ----
+                radioButton_acceleratorPedalOff.setText("\u677e\u5f00");
+                radioButton_acceleratorPedalOff.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        radioButton_acceleratorPedalOffMouseClicked(e);
+                    }
+                });
+                acceleratorPedalPanel.add(radioButton_acceleratorPedalOff);
+                radioButton_acceleratorPedalOff.setBounds(new Rectangle(new Point(10, 70), radioButton_acceleratorPedalOff.getPreferredSize()));
             }
             pedalPanel.add(acceleratorPedalPanel);
-            acceleratorPedalPanel.setBounds(150, 10, 70, 75);
+            acceleratorPedalPanel.setBounds(210, 35, 95, 100);
         }
         contentPane.add(pedalPanel);
-        pedalPanel.setBounds(45, 65, 230, 95);
+        pedalPanel.setBounds(5, 20, 310, 140);
 
         //======== steerWheelPanel ========
         {
@@ -255,8 +347,7 @@ public class CarGui extends JFrame {
             steerWheelPanel.add(button5);
             button5.setBounds(new Rectangle(new Point(520, 15), button5.getPreferredSize()));
 
-            {
-                // compute preferred size
+            { // compute preferred size
                 Dimension preferredSize = new Dimension();
                 for(int i = 0; i < steerWheelPanel.getComponentCount(); i++) {
                     Rectangle bounds = steerWheelPanel.getComponent(i).getBounds();
@@ -287,8 +378,7 @@ public class CarGui extends JFrame {
             parkBrakePanel.add(radioButton23);
             radioButton23.setBounds(new Rectangle(new Point(20, 55), radioButton23.getPreferredSize()));
 
-            {
-                // compute preferred size
+            { // compute preferred size
                 Dimension preferredSize = new Dimension();
                 for(int i = 0; i < parkBrakePanel.getComponentCount(); i++) {
                     Rectangle bounds = parkBrakePanel.getComponent(i).getBounds();
@@ -314,8 +404,7 @@ public class CarGui extends JFrame {
             otherPanel.add(radioButton24);
             radioButton24.setBounds(new Rectangle(new Point(10, 15), radioButton24.getPreferredSize()));
 
-            {
-                // compute preferred size
+            { // compute preferred size
                 Dimension preferredSize = new Dimension();
                 for(int i = 0; i < otherPanel.getComponentCount(); i++) {
                     Rectangle bounds = otherPanel.getComponent(i).getBounds();
@@ -349,18 +438,51 @@ public class CarGui extends JFrame {
 
         // 设置窗体右上角关闭
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // 离合器panel绘制边框
+        clutchPedalPanel.setBorder(BorderFactory.createTitledBorder("离合器踏板"));
+        // 离合器状态按钮组
+        ButtonGroup buttonGroup_clutch = new ButtonGroup();
+        buttonGroup_clutch.add(radioButton_clutchPedalOn);
+        buttonGroup_clutch.add(radioButton_clutchPedalOff);
+
+        // 刹车踏板panel绘制边框
+        brakePedalPanel.setBorder(BorderFactory.createTitledBorder("刹车踏板"));
+        // 刹车踏板状态按钮组
+        ButtonGroup buttonGroup_brake = new ButtonGroup();
+        buttonGroup_brake.add(radioButton_brakePedalOn);
+        buttonGroup_brake.add(radioButton_brakePedalOff);
+
+        // 加速踏板panel绘制边框
+        acceleratorPedalPanel.setBorder(BorderFactory.createTitledBorder("加速踏板"));
+        // 加速踏板状态按钮组
+        ButtonGroup buttonGroup_step = new ButtonGroup();
+        buttonGroup_step.add(radioButton_acceleratorPedalLightOn);
+        buttonGroup_step.add(radioButton_acceleratorPedalOff);
+
+        //左右转向灯组
+        ButtonGroup buttonGroup_trunSignal = new ButtonGroup();
+        buttonGroup_trunSignal.add(radioButton_lightTurnLeftSignalOn);
+        buttonGroup_trunSignal.add(radioButton_lightTurnRightSignalOn);
+
+        // 远近灯光、交替 按钮组
+        ButtonGroup buttonGroup_highDipped = new ButtonGroup();
+        buttonGroup_highDipped.add(radioButton_lightDippedOn);
+        buttonGroup_highDipped.add(radioButton_lightHighOn);
+        buttonGroup_highDipped.add(radioButton_lightHightDippedOn);
+
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     private JPanel lightPanel;
-    private JRadioButton radioButton1;
-    private JRadioButton radioButton2;
-    private JRadioButton radioButton3;
-    private JRadioButton radioButton4;
-    private JRadioButton radioButton5;
-    private JRadioButton radioButton6;
-    private JRadioButton radioButton7;
-    private JRadioButton radioButton8;
+    private JRadioButton radioButton_lightDippedOn;
+    private JRadioButton radioButton_lightHighOn;
+    private JRadioButton radioButton_lightHightDippedOn;
+    private JRadioButton radioButton_lightTurnLeftSignalOn;
+    private JRadioButton radioButton_lightTurnRightSignalOn;
+    private JRadioButton radioButton_lightFogOn;
+    private JRadioButton radioButton_lightOutLineMarkOn;
+    private JRadioButton radioButton_lightHazardWarnOn;
     private JButton button1;
     private JPanel gearPanel;
     private JRadioButton radioButton9;
@@ -372,14 +494,14 @@ public class CarGui extends JFrame {
     private JRadioButton radioButton15;
     private JPanel pedalPanel;
     private JPanel clutchPedalPanel;
-    private JRadioButton radioButton16;
-    private JRadioButton radioButton17;
+    private JRadioButton radioButton_clutchPedalOn;
+    private JRadioButton radioButton_clutchPedalOff;
     private JPanel brakePedalPanel;
-    private JRadioButton radioButton18;
-    private JRadioButton radioButton19;
+    private JRadioButton radioButton_brakePedalOn;
+    private JRadioButton radioButton_brakePedalOff;
     private JPanel acceleratorPedalPanel;
-    private JRadioButton radioButton20;
-    private JRadioButton radioButton21;
+    private JRadioButton radioButton_acceleratorPedalLightOn;
+    private JRadioButton radioButton_acceleratorPedalOff;
     private JPanel steerWheelPanel;
     private JButton button2;
     private JButton button3;
