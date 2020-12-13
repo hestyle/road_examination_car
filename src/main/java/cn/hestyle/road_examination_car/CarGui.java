@@ -74,18 +74,89 @@ public class CarGui extends JFrame {
         }
     }
 
+    //近光灯
+    private void radioButton_lightDippedOnMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_lightDippedOn.isEnabled()){
+
+        }
+    }
+    //远光灯
+    private void radioButton_lightHighOnMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_lightHighOn.isEnabled()){
+
+        }
+    }
+    // 远近交替
+    private void radioButton_lightHighDippedOnMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_lightHighDippedOn.isEnabled()){
+
+        }
+    }
+    // 左转灯
+    private void radioButton_lightTurnLeftSignalOnMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_lightTurnLeftSignalOn.isEnabled()){
+
+        }
+    }
+    // 右转灯
+    private void radioButton_lightTurnRightSignalOnMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_lightTurnRightSignalOn.isEnabled()){
+
+        }
+    }
+    // 雾灯
+    private void radioButton_lightFogOnMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_lightFogOn.isEnabled()){
+
+        }
+    }
+    // 示廓灯
+    private void radioButton_lightOutLineMarkOnMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_lightOutLineMarkOn.isEnabled()){
+
+        }
+    }
+    // 危险报警灯
+    private void radioButton_lightHazardWarnOnMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_lightHazardWarnOn.isEnabled()){
+
+        }
+    }
+    // 关闭所有灯光
+    private void button_lightOffMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        buttonGroup_highDipped.clearSelection();
+        buttonGroup_turnSignal.clearSelection();
+    }
+    // 关闭转向灯
+    private void radioButton_lightTurnSignalOffClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_lightTurnSignalOff.isEnabled()){
+            buttonGroup_turnSignal.clearSelection();
+        }
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         lightPanel = new JPanel();
         radioButton_lightDippedOn = new JRadioButton();
         radioButton_lightHighOn = new JRadioButton();
-        radioButton_lightHightDippedOn = new JRadioButton();
+        radioButton_lightHighDippedOn = new JRadioButton();
         radioButton_lightTurnLeftSignalOn = new JRadioButton();
         radioButton_lightTurnRightSignalOn = new JRadioButton();
         radioButton_lightFogOn = new JRadioButton();
         radioButton_lightOutLineMarkOn = new JRadioButton();
         radioButton_lightHazardWarnOn = new JRadioButton();
-        button1 = new JButton();
+        button_lightOff = new JButton();
+        radioButton_lightTurnSignalOff = new JRadioButton();
         gearPanel = new JPanel();
         radioButton9 = new JRadioButton();
         radioButton10 = new JRadioButton();
@@ -129,51 +200,116 @@ public class CarGui extends JFrame {
 
             //---- radioButton_lightDippedOn ----
             radioButton_lightDippedOn.setText("\u8fd1\u5149\u706f");
+            radioButton_lightDippedOn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_lightDippedOnMouseClicked(e);
+                }
+            });
             lightPanel.add(radioButton_lightDippedOn);
             radioButton_lightDippedOn.setBounds(new Rectangle(new Point(15, 65), radioButton_lightDippedOn.getPreferredSize()));
 
             //---- radioButton_lightHighOn ----
             radioButton_lightHighOn.setText("\u8fdc\u5149\u706f");
+            radioButton_lightHighOn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_lightHighOnMouseClicked(e);
+                }
+            });
             lightPanel.add(radioButton_lightHighOn);
             radioButton_lightHighOn.setBounds(new Rectangle(new Point(95, 65), radioButton_lightHighOn.getPreferredSize()));
 
-            //---- radioButton_lightHightDippedOn ----
-            radioButton_lightHightDippedOn.setText("\u8fdc\u3001\u8fd1\u706f\u5149\u4ea4\u66ff\u95ea\u70c1");
-            lightPanel.add(radioButton_lightHightDippedOn);
-            radioButton_lightHightDippedOn.setBounds(new Rectangle(new Point(165, 65), radioButton_lightHightDippedOn.getPreferredSize()));
+            //---- radioButton_lightHighDippedOn ----
+            radioButton_lightHighDippedOn.setText("\u8fdc\u3001\u8fd1\u706f\u5149\u4ea4\u66ff\u95ea\u70c1");
+            radioButton_lightHighDippedOn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_lightHighDippedOnMouseClicked(e);
+                }
+            });
+            lightPanel.add(radioButton_lightHighDippedOn);
+            radioButton_lightHighDippedOn.setBounds(new Rectangle(new Point(165, 65), radioButton_lightHighDippedOn.getPreferredSize()));
 
             //---- radioButton_lightTurnLeftSignalOn ----
             radioButton_lightTurnLeftSignalOn.setText("\u5de6\u8f6c\u706f");
+            radioButton_lightTurnLeftSignalOn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_lightTurnLeftSignalOnMouseClicked(e);
+                }
+            });
             lightPanel.add(radioButton_lightTurnLeftSignalOn);
             radioButton_lightTurnLeftSignalOn.setBounds(new Rectangle(new Point(15, 15), radioButton_lightTurnLeftSignalOn.getPreferredSize()));
 
             //---- radioButton_lightTurnRightSignalOn ----
             radioButton_lightTurnRightSignalOn.setText("\u53f3\u8f6c\u706f");
+            radioButton_lightTurnRightSignalOn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_lightTurnRightSignalOnMouseClicked(e);
+                }
+            });
             lightPanel.add(radioButton_lightTurnRightSignalOn);
-            radioButton_lightTurnRightSignalOn.setBounds(new Rectangle(new Point(95, 15), radioButton_lightTurnRightSignalOn.getPreferredSize()));
+            radioButton_lightTurnRightSignalOn.setBounds(new Rectangle(new Point(165, 15), radioButton_lightTurnRightSignalOn.getPreferredSize()));
 
             //---- radioButton_lightFogOn ----
             radioButton_lightFogOn.setText("\u96fe\u706f");
+            radioButton_lightFogOn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_lightFogOnMouseClicked(e);
+                }
+            });
             lightPanel.add(radioButton_lightFogOn);
             radioButton_lightFogOn.setBounds(new Rectangle(new Point(15, 40), radioButton_lightFogOn.getPreferredSize()));
 
             //---- radioButton_lightOutLineMarkOn ----
             radioButton_lightOutLineMarkOn.setText("\u793a\u5eca\u706f");
+            radioButton_lightOutLineMarkOn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_lightOutLineMarkOnMouseClicked(e);
+                }
+            });
             lightPanel.add(radioButton_lightOutLineMarkOn);
             radioButton_lightOutLineMarkOn.setBounds(new Rectangle(new Point(95, 40), radioButton_lightOutLineMarkOn.getPreferredSize()));
 
             //---- radioButton_lightHazardWarnOn ----
             radioButton_lightHazardWarnOn.setText("\u5371\u9669\u8b66\u62a5\u706f");
+            radioButton_lightHazardWarnOn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_lightHazardWarnOnMouseClicked(e);
+                }
+            });
             lightPanel.add(radioButton_lightHazardWarnOn);
             radioButton_lightHazardWarnOn.setBounds(new Rectangle(new Point(165, 40), radioButton_lightHazardWarnOn.getPreferredSize()));
 
-            //---- button1 ----
-            button1.setText("\u5173\u95ed\u6240\u6709\u706f\u5149");
-            lightPanel.add(button1);
-            button1.setBounds(new Rectangle(new Point(315, 35), button1.getPreferredSize()));
+            //---- button_lightOff ----
+            button_lightOff.setText("\u5173\u95ed\u6240\u6709\u706f\u5149");
+            button_lightOff.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    button_lightOffMouseClicked(e);
+                }
+            });
+            lightPanel.add(button_lightOff);
+            button_lightOff.setBounds(new Rectangle(new Point(281, 0), button_lightOff.getPreferredSize()));
+
+            //---- radioButton_lightTurnSignalOff ----
+            radioButton_lightTurnSignalOff.setText("\u5173\u95ed");
+            radioButton_lightTurnSignalOff.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_lightTurnSignalOffClicked(e);
+                }
+            });
+            lightPanel.add(radioButton_lightTurnSignalOff);
+            radioButton_lightTurnSignalOff.setBounds(95, 15, 54, 19);
         }
         contentPane.add(lightPanel);
-        lightPanel.setBounds(310, 65, 435, 95);
+        lightPanel.setBounds(310, 60, 435, 100);
 
         //======== gearPanel ========
         {
@@ -444,34 +580,32 @@ public class CarGui extends JFrame {
         // 离合器panel绘制边框
         clutchPedalPanel.setBorder(BorderFactory.createTitledBorder("离合器踏板"));
         // 离合器状态按钮组
-        ButtonGroup buttonGroup_clutch = new ButtonGroup();
+        buttonGroup_clutch = new ButtonGroup();
         buttonGroup_clutch.add(radioButton_clutchPedalOn);
         buttonGroup_clutch.add(radioButton_clutchPedalOff);
 
         // 刹车踏板panel绘制边框
         brakePedalPanel.setBorder(BorderFactory.createTitledBorder("刹车踏板"));
         // 刹车踏板状态按钮组
-        ButtonGroup buttonGroup_brake = new ButtonGroup();
+        buttonGroup_brake = new ButtonGroup();
         buttonGroup_brake.add(radioButton_brakePedalOn);
         buttonGroup_brake.add(radioButton_brakePedalOff);
-
         // 加速踏板panel绘制边框
         acceleratorPedalPanel.setBorder(BorderFactory.createTitledBorder("加速踏板"));
         // 加速踏板状态按钮组
-        ButtonGroup buttonGroup_step = new ButtonGroup();
+        buttonGroup_step = new ButtonGroup();
         buttonGroup_step.add(radioButton_acceleratorPedalLightOn);
         buttonGroup_step.add(radioButton_acceleratorPedalOff);
 
         //左右转向灯组
-        ButtonGroup buttonGroup_trunSignal = new ButtonGroup();
-        buttonGroup_trunSignal.add(radioButton_lightTurnLeftSignalOn);
-        buttonGroup_trunSignal.add(radioButton_lightTurnRightSignalOn);
-
+        buttonGroup_turnSignal = new ButtonGroup();
+        buttonGroup_turnSignal.add(radioButton_lightTurnLeftSignalOn);
+        buttonGroup_turnSignal.add(radioButton_lightTurnRightSignalOn);
         // 远近灯光、交替 按钮组
-        ButtonGroup buttonGroup_highDipped = new ButtonGroup();
+        buttonGroup_highDipped = new ButtonGroup();
         buttonGroup_highDipped.add(radioButton_lightDippedOn);
         buttonGroup_highDipped.add(radioButton_lightHighOn);
-        buttonGroup_highDipped.add(radioButton_lightHightDippedOn);
+        buttonGroup_highDipped.add(radioButton_lightHighDippedOn);
 
     }
 
@@ -479,13 +613,14 @@ public class CarGui extends JFrame {
     private JPanel lightPanel;
     private JRadioButton radioButton_lightDippedOn;
     private JRadioButton radioButton_lightHighOn;
-    private JRadioButton radioButton_lightHightDippedOn;
+    private JRadioButton radioButton_lightHighDippedOn;
     private JRadioButton radioButton_lightTurnLeftSignalOn;
     private JRadioButton radioButton_lightTurnRightSignalOn;
     private JRadioButton radioButton_lightFogOn;
     private JRadioButton radioButton_lightOutLineMarkOn;
     private JRadioButton radioButton_lightHazardWarnOn;
-    private JButton button1;
+    private JButton button_lightOff;
+    private JRadioButton radioButton_lightTurnSignalOff;
     private JPanel gearPanel;
     private JRadioButton radioButton9;
     private JRadioButton radioButton10;
@@ -517,4 +652,11 @@ public class CarGui extends JFrame {
     private JLabel label1;
     private JLabel speedLabel;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
+
+    private ButtonGroup buttonGroup_brake;
+    private ButtonGroup buttonGroup_clutch;
+    private ButtonGroup buttonGroup_step;
+    private ButtonGroup buttonGroup_turnSignal;
+    private ButtonGroup buttonGroup_highDipped;
+
 }

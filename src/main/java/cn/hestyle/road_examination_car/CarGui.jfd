@@ -16,6 +16,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightDippedOn"
 					"text": "近光灯"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightDippedOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 15
 					"y": 65
@@ -23,13 +24,15 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightHighOn"
 					"text": "远光灯"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightHighOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 95
 					"y": 65
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
-					name: "radioButton_lightHightDippedOn"
+					name: "radioButton_lightHighDippedOn"
 					"text": "远、近灯光交替闪烁"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightHighDippedOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 165
 					"y": 65
@@ -37,6 +40,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightTurnLeftSignalOn"
 					"text": "左转灯"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightTurnLeftSignalOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 15
 					"y": 15
@@ -44,13 +48,15 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightTurnRightSignalOn"
 					"text": "右转灯"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightTurnRightSignalOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-					"x": 95
+					"x": 165
 					"y": 15
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightFogOn"
 					"text": "雾灯"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightFogOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 15
 					"y": 40
@@ -58,6 +64,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightOutLineMarkOn"
 					"text": "示廊灯"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightOutLineMarkOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 95
 					"y": 40
@@ -65,21 +72,33 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightHazardWarnOn"
 					"text": "危险警报灯"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightHazardWarnOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 165
 					"y": 40
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "button1"
+					name: "button_lightOff"
 					"text": "关闭所有灯光"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "button_lightOffMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-					"x": 315
-					"y": 35
+					"x": 281
+					"y": 0
+				} )
+				add( new FormComponent( "javax.swing.JRadioButton" ) {
+					name: "radioButton_lightTurnSignalOff"
+					"text": "关闭"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightTurnSignalOffClicked", true ) )
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"width": 54
+					"height": 19
+					"x": 95
+					"y": 15
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 310
-				"y": 65
-				"height": 95
+				"y": 60
+				"height": 100
 				"width": 435
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {

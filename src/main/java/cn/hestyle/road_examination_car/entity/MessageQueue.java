@@ -23,4 +23,8 @@ public class MessageQueue {
         infoList.add(message);
         this.notifyAll();
     }
+
+    public Integer size(){
+        return this.infoList.size();
+    }
 }

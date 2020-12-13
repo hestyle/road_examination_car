@@ -16,5 +16,10 @@ public class OperationsMessageTask<T> extends BaseMessageTask {
     public void execute() {
         if(socket == null)
             System.out.println(operationList.toString());
+        else {
+            synchronized (socket){
+                // 套接字通信
+            }
+        }
     }
 }
