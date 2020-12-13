@@ -4,7 +4,7 @@
 
 package cn.hestyle.road_examination_car;
 
-import cn.hestyle.road_examination_car.message.SingleOperationMessage;
+import cn.hestyle.road_examination_car.task.SingleOperationMessageTask;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -23,7 +23,7 @@ public class CarGui extends JFrame {
     private void radioButton_clutchPedalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if(radioButton_clutchPedalOn.isEnabled()){
-            messageQueue.putMessage(new SingleOperationMessage<String>("踩离合踏板"));
+            messageQueue.putMessage(new SingleOperationMessageTask<String>("踩离合踏板"));
             radioButton_clutchPedalOn.setEnabled(false);
             radioButton_clutchPedalOff.setEnabled(true);
         }
@@ -32,7 +32,7 @@ public class CarGui extends JFrame {
     private void radioButton_clutchPedalOffMouseClicked(MouseEvent e) {
         // TODO add your code here
         if(radioButton_clutchPedalOff.isEnabled()){
-            messageQueue.putMessage(new SingleOperationMessage<String>("松开开合踏板"));
+            messageQueue.putMessage(new SingleOperationMessageTask<String>("松开开合踏板"));
             radioButton_clutchPedalOn.setEnabled(true);
             radioButton_clutchPedalOff.setEnabled(false);
         }
@@ -41,7 +41,7 @@ public class CarGui extends JFrame {
     private void radioButton_brakePedalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if(radioButton_brakePedalOn.isEnabled()){
-            messageQueue.putMessage(new SingleOperationMessage<String>("踩刹车踏板"));
+            messageQueue.putMessage(new SingleOperationMessageTask<String>("踩刹车踏板"));
             radioButton_brakePedalOn.setEnabled(false);
             radioButton_brakePedalOff.setEnabled(true);
         }
@@ -50,7 +50,7 @@ public class CarGui extends JFrame {
     private void radioButton_brakePedalOffMouseClicked(MouseEvent e) {
         // TODO add your code here
         if(radioButton_brakePedalOff.isEnabled()){
-            messageQueue.putMessage(new SingleOperationMessage<String>("松开刹车踏板"));
+            messageQueue.putMessage(new SingleOperationMessageTask<String>("松开刹车踏板"));
             radioButton_brakePedalOn.setEnabled(true);
             radioButton_brakePedalOff.setEnabled(false);
         }
@@ -59,7 +59,7 @@ public class CarGui extends JFrame {
     private void radioButton_acceleratorPedalLightOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if(radioButton_acceleratorPedalLightOn.isEnabled()){
-            messageQueue.putMessage(new SingleOperationMessage<String>("轻踩加速踏板"));
+            messageQueue.putMessage(new SingleOperationMessageTask<String>("轻踩加速踏板"));
             radioButton_acceleratorPedalLightOn.setEnabled(false);
             radioButton_acceleratorPedalOff.setEnabled(true);
         }
@@ -68,7 +68,7 @@ public class CarGui extends JFrame {
     private void radioButton_acceleratorPedalOffMouseClicked(MouseEvent e) {
         // TODO add your code here
         if(radioButton_acceleratorPedalOff.isEnabled()){
-            messageQueue.putMessage(new SingleOperationMessage<String>("松开加速踏板"));
+            messageQueue.putMessage(new SingleOperationMessageTask<String>("松开加速踏板"));
             radioButton_acceleratorPedalLightOn.setEnabled(true);
             radioButton_acceleratorPedalOff.setEnabled(false);
         }

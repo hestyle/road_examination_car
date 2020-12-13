@@ -1,7 +1,7 @@
 package cn.hestyle.road_examination_car;
 
 import cn.hestyle.road_examination_car.entity.MessageQueue;
-import cn.hestyle.road_examination_car.server.MessageHandler;
+import cn.hestyle.road_examination_car.woker.MessageHandler;
 
 public class GuiApp {
     public static MessageQueue messageQueue = new MessageQueue();

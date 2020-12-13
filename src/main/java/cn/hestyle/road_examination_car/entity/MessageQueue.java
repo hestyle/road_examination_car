@@ -1,13 +1,13 @@
 package cn.hestyle.road_examination_car.entity;
 
-import cn.hestyle.road_examination_car.message.BaseMessage;
+import cn.hestyle.road_examination_car.task.BaseMessageTask;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class MessageQueue {
-    private List<BaseMessage> infoList = new LinkedList<>();
-    public synchronized BaseMessage getMessage() {
+    private List<BaseMessageTask> infoList = new LinkedList<>();
+    public synchronized BaseMessageTask getMessage() {
         while(infoList.size() == 0) {
             try {
                 this.wait();
@@ -19,7 +19,7 @@ public class MessageQueue {
         return infoList.remove(0);
     }
 
-    public synchronized void putMessage(BaseMessage message) {
+    public synchronized void putMessage(BaseMessageTask message) {
         infoList.add(message);
         this.notifyAll();
     }

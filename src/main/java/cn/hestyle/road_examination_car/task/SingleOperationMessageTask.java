@@ -1,11 +1,11 @@
-package cn.hestyle.road_examination_car.message;
+package cn.hestyle.road_examination_car.task;
 
 import java.net.Socket;
 
-public class SingleOperationMessage<T> implements BaseMessage {
+public class SingleOperationMessageTask<T> extends BaseMessageTask {
     T data;
     Socket socket;
-    public SingleOperationMessage(T data){
+    public SingleOperationMessageTask(T data){
         this.data = data;
         this.socket = socket;
     }

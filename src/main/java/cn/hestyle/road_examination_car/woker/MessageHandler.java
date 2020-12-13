@@ -1,6 +1,6 @@
-package cn.hestyle.road_examination_car.server;
+package cn.hestyle.road_examination_car.woker;
 
-import cn.hestyle.road_examination_car.message.BaseMessage;
+import cn.hestyle.road_examination_car.task.BaseMessageTask;
 import cn.hestyle.road_examination_car.entity.MessageQueue;
 
 import java.net.Socket;
@@ -22,13 +22,12 @@ public class MessageHandler extends Thread{
         if(targetIP != null && targetIP != ""){
             try {
                 socket = new Socket(targetIP, targetPort);
+                //与考试端建立连接
             }catch (Exception e){
                 e.printStackTrace();
             }
 
         }
-
-        //与考试端建立连接
     }
 
     public void shutdown() {
@@ -45,7 +44,7 @@ public class MessageHandler extends Thread{
     public void run() {
         System.out.println("按钮消息发送线程 start.");
         while(!stop) {
-            BaseMessage message = messageQueue.getMessage();
+            BaseMessageTask message = messageQueue.getMessage();
             if(message != null) {
                 System.out.println(message);
                 message.setSocket(socket);

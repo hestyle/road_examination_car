@@ -1,9 +1,9 @@
-package cn.hestyle.road_examination_car.message;
+package cn.hestyle.road_examination_car.task;
 
 import java.net.Socket;
 import java.util.List;
 
-public class OperationsMessage<T> implements BaseMessage {
+public class OperationsMessageTask<T> extends BaseMessageTask {
     List<T> operationList;
     Socket socket;
 
@@ -12,10 +12,11 @@ public class OperationsMessage<T> implements BaseMessage {
         this.socket = socket;
     }
 
-    public OperationsMessage(List<T> operationList){
+    public OperationsMessageTask(List<T> operationList){
         this.operationList = operationList;
         this.socket = socket;
     }
+
     @Override
     public void execute() {
         if(socket == null)
