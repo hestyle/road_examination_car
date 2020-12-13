@@ -6,5 +6,8 @@ public abstract class BaseMessageTask {
     Socket socket;
 
     public abstract void execute();
-    public abstract void setSocket(Socket socket);
+
+    public  void setSocket(Socket socket){
+        this.socket = socket;
+    }
 }

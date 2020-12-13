@@ -42,13 +42,18 @@ public class MessageHandler extends Thread{
     }
 
     public void run() {
-        System.out.println("按钮消息发送线程 start.");
+        System.out.println("按钮消息处理线程 start.");
         while(!stop) {
             BaseMessageTask message = messageQueue.getMessage();
             if(message != null) {
-                System.out.println(message);
                 message.setSocket(socket);
                 message.execute();
+            }
+
+            try {
+                sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
         System.out.println(getName()+" end.");

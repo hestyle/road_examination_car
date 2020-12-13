@@ -11,11 +11,6 @@ public class SingleOperationMessageTask<T> extends BaseMessageTask {
     }
 
     @Override
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
-
-    @Override
     public void execute() {
         if(socket == null)
             System.out.println(data.toString());
