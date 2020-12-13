@@ -7,11 +7,6 @@ public class OperationsMessageTask<T> extends BaseMessageTask {
     List<T> operationList;
     Socket socket;
 
-    @Override
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
-
     public OperationsMessageTask(List<T> operationList){
         this.operationList = operationList;
         this.socket = socket;
