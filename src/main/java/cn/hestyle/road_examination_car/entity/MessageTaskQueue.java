@@ -5,7 +5,7 @@ import cn.hestyle.road_examination_car.task.BaseMessageTask;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MessageQueue {
+public class MessageTaskQueue {
     private List<BaseMessageTask> infoList = new LinkedList<>();
     public synchronized BaseMessageTask getMessage() {
         while(infoList.size() == 0) {

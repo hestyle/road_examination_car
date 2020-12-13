@@ -40,4 +40,27 @@ public class TcpServerThread extends Thread {
         }
         System.out.println("TCP服务器已关闭！");
     }
+
+    public static void main(String[] args){
+        try {
+            Integer tmpPort = 12325;
+            if (tmpPort < 0 || tmpPort > 65535) {
+                System.err.println("TCP服务启动失败，端口号【" + tmpPort + "】非法！");
+                return;
+            } else if (tmpPort < 1024) {
+                System.err.println("TCP服务启动失败，端口号【" + tmpPort + "】为系统保留端口号，请修改为1024~65535之间！");
+                return;
+            }
+            MainGui.port = tmpPort;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return;
+        }
+
+        // 启动tcp服务器
+        TcpServerThread tcpServerThread = new TcpServerThread();
+        tcpServerThread.start();
+        // disable启动tcp服务的按钮,enable停止tcp服务的按钮
+        System.err.println("提示：TCP服务运行中，正在等待连接...");
+    }
 }
