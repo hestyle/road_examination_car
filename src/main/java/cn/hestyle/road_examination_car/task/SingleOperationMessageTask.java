@@ -1,18 +1,42 @@
 package cn.hestyle.road_examination_car.task;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class SingleOperationMessageTask<T> extends BaseMessageTask {
     T data;
-    Socket socket;
     public SingleOperationMessageTask(T data){
         this.data = data;
-        this.socket = socket;
     }
 
     @Override
     public void execute() {
         if(socket == null)
             System.out.println(data.toString());
+        else {
+            synchronized (socket){
+                // 套接字通信
+                try {
+                    String msg = data.toString();
+                    Integer length = 0;
+                    byte[] b = new byte[1024];
+
+                    ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(msg.getBytes());
+                    OutputStream outputStream = socket.getOutputStream();
+                    while (byteArrayInputStream.available() > 0){
+                        length = byteArrayInputStream.read(b);
+                        outputStream.write(b, 0, length);
+                        outputStream.flush();
+                    }
+                    byteArrayInputStream.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
