@@ -1,7 +1,7 @@
 package cn.hestyle.road_examination_car.woker;
 
 import cn.hestyle.road_examination_car.task.BaseMessageTask;
-import cn.hestyle.road_examination_car.entity.MessageQueue;
+import cn.hestyle.road_examination_car.entity.MessageTaskQueue;
 
 import java.net.Socket;
 
@@ -9,14 +9,14 @@ public class MessageHandler extends Thread{
     private static int count = 0;
     private boolean busy = false;
     private boolean stop = false;
-    private MessageQueue messageQueue;
+    private MessageTaskQueue messageTaskQueue;
 
     private String targetIP;
     private Integer targetPort;
     private Socket socket;
 
-    public MessageHandler(MessageQueue messageQueue, String targetIP, Integer targetPort){
-        this.messageQueue = messageQueue;
+    public MessageHandler(MessageTaskQueue messageTaskQueue, String targetIP, Integer targetPort){
+        this.messageTaskQueue = messageTaskQueue;
         this.targetIP = targetIP;
         this.targetPort = targetPort;
         if(targetIP != null && targetIP != ""){
@@ -30,8 +30,8 @@ public class MessageHandler extends Thread{
         }
     }
 
-    public MessageHandler(MessageQueue messageQueue, Socket socket){
-        this.messageQueue = messageQueue;
+    public MessageHandler(MessageTaskQueue messageTaskQueue, Socket socket){
+        this.messageTaskQueue = messageTaskQueue;
         this.socket = socket;
     }
 
@@ -49,17 +49,7 @@ public class MessageHandler extends Thread{
     public void run() {
         System.out.println("按钮消息处理线程 start.");
         while(!stop) {
-            if(messageQueue.size() == 0){
-                try {
-                    synchronized (messageQueue){
-                        if(messageQueue.size() == 0)
-                            messageQueue.wait();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            BaseMessageTask message = messageQueue.getMessage();
+            BaseMessageTask message = messageTaskQueue.getMessage();
             if(message != null) {
                 message.setSocket(socket);
                 message.execute();
