@@ -224,9 +224,9 @@ new FormModel {
 				} ) {
 					name: "acceleratorPedalPanel"
 					add( new FormComponent( "javax.swing.JRadioButton" ) {
-						name: "radioButton_acceleratorPedalLightOn"
+						name: "radioButton_acceleratorPedalOn"
 						"text": "轻踩"
-						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_acceleratorPedalLightOnMouseClicked", true ) )
+						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_acceleratorPedalOnMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 10
 						"y": 40
