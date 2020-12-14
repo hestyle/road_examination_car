@@ -4,15 +4,17 @@
 
 package cn.hestyle.road_examination_car;
 
+import cn.hestyle.road_examination_car.entity.MessageTaskQueue;
 import cn.hestyle.road_examination_car.task.SingleOperationMessageTask;
+import cn.hestyle.road_examination_car.woker.MessageHandler;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.*;
-
-import static cn.hestyle.road_examination_car.GuiApp.messageTaskQueue;
 
 /**
  * @author hestyle
@@ -586,7 +588,7 @@ public class CarGui extends JFrame {
                 }
             });
             lightPanel.add(radioButton_lightHighDippedClose);
-            radioButton_lightHighDippedClose.setBounds(new Rectangle(new Point(308, 65), radioButton_lightHighDippedClose.getPreferredSize()));
+            radioButton_lightHighDippedClose.setBounds(new Rectangle(new Point(308, 70), radioButton_lightHighDippedClose.getPreferredSize()));
         }
         contentPane.add(lightPanel);
         lightPanel.setBounds(310, 55, 435, 100);
@@ -839,7 +841,7 @@ public class CarGui extends JFrame {
                 }
             });
             otherPanel.add(radioButton_obeserveReverseMirror);
-            radioButton_obeserveReverseMirror.setBounds(new Rectangle(new Point(10, 5), radioButton_obeserveReverseMirror.getPreferredSize()));
+            radioButton_obeserveReverseMirror.setBounds(new Rectangle(new Point(10, 25), radioButton_obeserveReverseMirror.getPreferredSize()));
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
@@ -856,7 +858,7 @@ public class CarGui extends JFrame {
             }
         }
         contentPane.add(otherPanel);
-        otherPanel.setBounds(10, 240, 105, 35);
+        otherPanel.setBounds(490, 255, 130, 55);
 
         //---- label1 ----
         label1.setText("\u8f66\u901f\uff1a");
@@ -881,7 +883,7 @@ public class CarGui extends JFrame {
                 }
             });
             steerWheelPanel.add(button_steerWheelSlightTurnLeft);
-            button_steerWheelSlightTurnLeft.setBounds(new Rectangle(new Point(175, 5), button_steerWheelSlightTurnLeft.getPreferredSize()));
+            button_steerWheelSlightTurnLeft.setBounds(new Rectangle(new Point(175, 27), button_steerWheelSlightTurnLeft.getPreferredSize()));
 
             //---- button_steerWheelModerateTurnLeft ----
             button_steerWheelModerateTurnLeft.setText("\u5de6\u8f6c\u7ea6\u4e00\u5708(15\u00b0~45\u00b0)");
@@ -892,7 +894,7 @@ public class CarGui extends JFrame {
                 }
             });
             steerWheelPanel.add(button_steerWheelModerateTurnLeft);
-            button_steerWheelModerateTurnLeft.setBounds(new Rectangle(new Point(10, 5), button_steerWheelModerateTurnLeft.getPreferredSize()));
+            button_steerWheelModerateTurnLeft.setBounds(new Rectangle(new Point(10, 27), button_steerWheelModerateTurnLeft.getPreferredSize()));
 
             //---- button_steerWheelSlightTurnRight ----
             button_steerWheelSlightTurnRight.setText("\u53f3\u8f6c\u7ea6\u534a\u5708(0\u00b0~15\u00b0)");
@@ -903,7 +905,7 @@ public class CarGui extends JFrame {
                 }
             });
             steerWheelPanel.add(button_steerWheelSlightTurnRight);
-            button_steerWheelSlightTurnRight.setBounds(new Rectangle(new Point(360, 5), button_steerWheelSlightTurnRight.getPreferredSize()));
+            button_steerWheelSlightTurnRight.setBounds(new Rectangle(new Point(360, 27), button_steerWheelSlightTurnRight.getPreferredSize()));
 
             //---- button_steerWheelModerateTurnRight ----
             button_steerWheelModerateTurnRight.setText("\u53f3\u8f6c\u7ea6\u4e00\u5708(15\u00b0~45\u00b0)");
@@ -914,7 +916,7 @@ public class CarGui extends JFrame {
                 }
             });
             steerWheelPanel.add(button_steerWheelModerateTurnRight);
-            button_steerWheelModerateTurnRight.setBounds(new Rectangle(new Point(520, 5), button_steerWheelModerateTurnRight.getPreferredSize()));
+            button_steerWheelModerateTurnRight.setBounds(new Rectangle(new Point(520, 27), button_steerWheelModerateTurnRight.getPreferredSize()));
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
@@ -931,7 +933,7 @@ public class CarGui extends JFrame {
             }
         }
         contentPane.add(steerWheelPanel);
-        steerWheelPanel.setBounds(10, 190, 690, 35);
+        steerWheelPanel.setBounds(10, 165, 735, 60);
 
         //======== safetyBeltPanel ========
         {
@@ -1120,6 +1122,12 @@ public class CarGui extends JFrame {
         //速度label文字右对齐
         speedLabel.setHorizontalAlignment(JTextField.RIGHT);
 
+        //方向盘
+        steerWheelPanel.setBorder(BorderFactory.createTitledBorder("方向盘"));
+
+        // other
+        otherPanel.setBorder((BorderFactory.createTitledBorder("杂项")));
+
         gearActionHandler.start();
         acceleratorActionHandler.start();
     }
@@ -1194,6 +1202,19 @@ public class CarGui extends JFrame {
     private AcceleratorActionHandler acceleratorActionHandler = new AcceleratorActionHandler();
     private Lock gearActionHandlerLock = new ReentrantLock();
 
+    public static MessageTaskQueue messageTaskQueue = new MessageTaskQueue();
+
+    public static void launch(Socket socket) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                MessageHandler messageHandler = null;
+                messageHandler = new MessageHandler(messageTaskQueue, socket);
+                messageHandler.start();
+                new CarGui().setVisible(true);
+            }
+        });
+    }
+
     // 挂挡处理线程
     class GearActionHandler extends Thread {
         private Boolean busy = false;
@@ -1232,19 +1253,11 @@ public class CarGui extends JFrame {
                                     messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂空挡"));
                                     break;
                                 case 1:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂1挡"));
-                                    break;
                                 case 2:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂2挡"));
-                                    break;
                                 case 3:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂3挡"));
-                                    break;
                                 case 4:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂4挡"));
-                                    break;
                                 case 5:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂5挡"));
+                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂"+nextGear+"挡"));
                                     break;
                                 case -1:
                                     messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂倒挡"));
@@ -1302,13 +1315,13 @@ public class CarGui extends JFrame {
                                 speedLabel.setText(speed.toString());
                                 sleep(150);
                             }else {
-                                messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("空挡加速踏板"));
+                                messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("空挡踩加速踏板"));
                                 waittingGear = true;
                                 synchronized (this){
                                     this.wait();
                                 }
                             }
-                        } else {
+                        } else { // 松开加速踏板
                             messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("松开加速踏板"));
                             break;
                         }
@@ -1318,5 +1331,9 @@ public class CarGui extends JFrame {
                 }
             }
         }
+    }
+
+    public static void main(String[] args){
+            CarGui.launch(null);
     }
 }

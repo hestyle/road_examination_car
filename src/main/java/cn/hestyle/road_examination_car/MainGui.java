@@ -9,8 +9,13 @@ import java.awt.event.*;
 import cn.hestyle.road_examination_car.server.TcpRequestHandlerThread;
 import cn.hestyle.road_examination_car.server.TcpServerThread;
 import cn.hestyle.road_examination_car.util.LocalNetworkHelp;
+import cn.hestyle.road_examination_car.woker.MessageHandler;
+import com.sun.corba.se.spi.activation.Server;
 
 import java.awt.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import javax.swing.*;
 
 /**
@@ -50,14 +55,34 @@ public class MainGui extends JFrame {
         // disable端口号输入框
         this.portTextField.setEnabled(false);
         // 启动tcp服务器
-        MainGui.tcpServerThread = new TcpServerThread();
-        MainGui.tcpServerThread.start();
+//        MainGui.tcpServerThread = new TcpServerThread();
+//        MainGui.tcpServerThread.start();
+
+//        wjl code start
+        ServerSocket server = null;
+        try {
+            server = new ServerSocket(port);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+//        wjl code end
+
         // disable启动tcp服务的按钮,enable停止tcp服务的按钮
         this.startTcpButton.setEnabled(false);
         this.stopTcpButton.setEnabled(true);
         this.tipsLabel.setText("提示：TCP服务运行中，正在等待连接...");
+
+        Socket socket = null;
+        try {
+            socket = server.accept();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
         // 弹窗提示
         JOptionPane.showMessageDialog(this, "已成功启动TCP服务！");
+        this.setVisible(false);
+        CarGui.launch(socket);
     }
 
     /**
@@ -183,9 +208,7 @@ public class MainGui extends JFrame {
 
     public static void main(String[] args) {
         // 打开主界面
-//        MainGui mainGui = new MainGui();
-//        mainGui.setVisible(true);
-        CarGui carGui = new CarGui();
-        carGui.setVisible(true);
+        MainGui mainGui = new MainGui();
+        mainGui.setVisible(true);
     }
 }
