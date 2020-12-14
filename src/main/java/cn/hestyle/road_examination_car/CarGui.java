@@ -66,6 +66,34 @@ public class CarGui extends JFrame {
             radioButton_acceleratorPedalLightOn.setEnabled(false);
             radioButton_acceleratorPedalOff.setEnabled(true);
 
+            class TempThread extends Thread{
+                public void run() {
+                    while (true){
+                        if(radioButton_acceleratorPedalLightOn.isEnabled() == false){
+                            // 判断加速条件
+                            if(radioButton_gearNeutral.isEnabled()){
+                                Double speed = Double.valueOf(speedLabel.getText());
+                                speed += 0.5;
+                                speedLabel.setText(speed.toString());
+                            }
+                        }else {
+                            try {
+                                this.join();
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                        try {
+                            this.sleep(150);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+            TempThread thread = new TempThread();
+            thread.start();
+
             messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("轻踩加速踏板"));
         }
     }
@@ -264,12 +292,12 @@ public class CarGui extends JFrame {
 
     private void button_steerWheelModerateTurnLeftMouseClicked(MouseEvent e) {
         // TODO add your code here
-        messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("左打方向盘半圈"));
+        messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("左打方向盘一圈"));
     }
 
     private void button_steerWheelSlightTurnLeftMouseClicked(MouseEvent e) {
         // TODO add your code here
-        messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("左打方向盘一圈"));
+        messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("左打方向盘半圈"));
     }
 
     private void button_steerWheelSlightTurnRightMouseClicked(MouseEvent e) {
@@ -280,6 +308,120 @@ public class CarGui extends JFrame {
     private void button_steerWheelModerateTurnRightMouseClicked(MouseEvent e) {
         // TODO add your code here
         messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("右转方向盘一圈"));
+    }
+
+    private void radioButton_obeserveReverseMirrorMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_obeserveReverseMirror.isSelected()){
+            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("观察后视镜"));
+            radioButton_obeserveReverseMirror.setSelected(false);
+        }
+    }
+
+    // 空挡
+    private void radioButton_gearNeutralMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_gearNeutral.isEnabled()){
+            radioButton_gearNeutral.setEnabled(false);
+            radioButton_gearForward.setEnabled(true);
+            radioButton_gearSecond.setEnabled(true);
+            radioButton_gearThird.setEnabled(true);
+            radioButton_gearFourth.setEnabled(true);
+            radioButton_gearFifth.setEnabled(true);
+            radioButton_gearReverse.setEnabled(true);
+
+            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂空挡"));
+        }
+    }
+    // 一档
+    private void radioButton_gearForwardMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_gearForward.isEnabled()){
+            radioButton_gearNeutral.setEnabled(true);
+            radioButton_gearForward.setEnabled(false);
+            radioButton_gearSecond.setEnabled(true);
+            radioButton_gearThird.setEnabled(true);
+            radioButton_gearFourth.setEnabled(true);
+            radioButton_gearFifth.setEnabled(true);
+            radioButton_gearReverse.setEnabled(true);
+
+            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂1挡"));
+        }
+    }
+    // 二档
+    private void radioButton_gearSecondMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_gearSecond.isEnabled()){
+            radioButton_gearNeutral.setEnabled(true);
+            radioButton_gearForward.setEnabled(true);
+            radioButton_gearSecond.setEnabled(false);
+            radioButton_gearThird.setEnabled(true);
+            radioButton_gearFourth.setEnabled(true);
+            radioButton_gearFifth.setEnabled(true);
+            radioButton_gearReverse.setEnabled(true);
+
+            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂2挡"));
+        }
+    }
+    // 三档
+    private void radioButton_gearThirdMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_gearThird.isEnabled()){
+            radioButton_gearNeutral.setEnabled(true);
+            radioButton_gearForward.setEnabled(true);
+            radioButton_gearSecond.setEnabled(true);
+            radioButton_gearThird.setEnabled(false);
+            radioButton_gearFourth.setEnabled(true);
+            radioButton_gearFifth.setEnabled(true);
+            radioButton_gearReverse.setEnabled(true);
+
+            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂3挡"));
+        }
+    }
+    // 四档
+    private void radioButton_gearFourthMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_gearFourth.isEnabled()){
+            radioButton_gearNeutral.setEnabled(true);
+            radioButton_gearForward.setEnabled(true);
+            radioButton_gearSecond.setEnabled(true);
+            radioButton_gearThird.setEnabled(true);
+            radioButton_gearFourth.setEnabled(false);
+            radioButton_gearFifth.setEnabled(true);
+            radioButton_gearReverse.setEnabled(true);
+
+            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂4挡"));
+        }
+    }
+    // 五档
+    private void radioButton_gearFifthMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_gearFifth.isEnabled()){
+            radioButton_gearNeutral.setEnabled(true);
+            radioButton_gearForward.setEnabled(true);
+            radioButton_gearSecond.setEnabled(true);
+            radioButton_gearThird.setEnabled(true);
+            radioButton_gearFourth.setEnabled(true);
+            radioButton_gearFifth.setEnabled(false);
+            radioButton_gearReverse.setEnabled(true);
+
+            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂5挡"));
+        }
+    }
+    // 倒档
+    private void radioButton_gearReverseMouseClicked(MouseEvent e) {
+        // TODO add your code here
+        if(radioButton_gearReverse.isEnabled()){
+            radioButton_gearNeutral.setEnabled(true);
+            radioButton_gearForward.setEnabled(true);
+            radioButton_gearSecond.setEnabled(true);
+            radioButton_gearThird.setEnabled(true);
+            radioButton_gearFourth.setEnabled(true);
+            radioButton_gearFifth.setEnabled(true);
+            radioButton_gearReverse.setEnabled(false);
+
+            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂倒挡"));
+        }
     }
 
 
@@ -333,6 +475,7 @@ public class CarGui extends JFrame {
         doorPanel = new JPanel();
         radioButton_doorOpen = new JRadioButton();
         radioButton_doorClose = new JRadioButton();
+        label2 = new JLabel();
 
         //======== this ========
         setTitle("\u8f66\u8f86\u72b6\u6001\u6a21\u62df");
@@ -353,7 +496,7 @@ public class CarGui extends JFrame {
                 }
             });
             lightPanel.add(radioButton_lightDippedOn);
-            radioButton_lightDippedOn.setBounds(new Rectangle(new Point(15, 65), radioButton_lightDippedOn.getPreferredSize()));
+            radioButton_lightDippedOn.setBounds(new Rectangle(new Point(15, 70), radioButton_lightDippedOn.getPreferredSize()));
 
             //---- radioButton_lightHighOn ----
             radioButton_lightHighOn.setText("\u8fdc\u5149\u706f");
@@ -364,7 +507,7 @@ public class CarGui extends JFrame {
                 }
             });
             lightPanel.add(radioButton_lightHighOn);
-            radioButton_lightHighOn.setBounds(new Rectangle(new Point(95, 65), radioButton_lightHighOn.getPreferredSize()));
+            radioButton_lightHighOn.setBounds(new Rectangle(new Point(95, 70), radioButton_lightHighOn.getPreferredSize()));
 
             //---- radioButton_lightHighDippedOn ----
             radioButton_lightHighDippedOn.setText("\u8fdc\u3001\u8fd1\u706f\u5149\u4ea4\u66ff\u95ea\u70c1");
@@ -375,7 +518,7 @@ public class CarGui extends JFrame {
                 }
             });
             lightPanel.add(radioButton_lightHighDippedOn);
-            radioButton_lightHighDippedOn.setBounds(new Rectangle(new Point(165, 65), radioButton_lightHighDippedOn.getPreferredSize()));
+            radioButton_lightHighDippedOn.setBounds(new Rectangle(new Point(165, 70), radioButton_lightHighDippedOn.getPreferredSize()));
 
             //---- radioButton_lightTurnLeftSignalOn ----
             radioButton_lightTurnLeftSignalOn.setText("\u5de6\u8f6c\u706f");
@@ -386,7 +529,7 @@ public class CarGui extends JFrame {
                 }
             });
             lightPanel.add(radioButton_lightTurnLeftSignalOn);
-            radioButton_lightTurnLeftSignalOn.setBounds(new Rectangle(new Point(15, 15), radioButton_lightTurnLeftSignalOn.getPreferredSize()));
+            radioButton_lightTurnLeftSignalOn.setBounds(new Rectangle(new Point(15, 20), radioButton_lightTurnLeftSignalOn.getPreferredSize()));
 
             //---- radioButton_lightTurnRightSignalOn ----
             radioButton_lightTurnRightSignalOn.setText("\u53f3\u8f6c\u706f");
@@ -397,7 +540,7 @@ public class CarGui extends JFrame {
                 }
             });
             lightPanel.add(radioButton_lightTurnRightSignalOn);
-            radioButton_lightTurnRightSignalOn.setBounds(new Rectangle(new Point(165, 15), radioButton_lightTurnRightSignalOn.getPreferredSize()));
+            radioButton_lightTurnRightSignalOn.setBounds(new Rectangle(new Point(165, 20), radioButton_lightTurnRightSignalOn.getPreferredSize()));
 
             //---- radioButton_lightFogOn ----
             radioButton_lightFogOn.setText("\u96fe\u706f");
@@ -408,7 +551,7 @@ public class CarGui extends JFrame {
                 }
             });
             lightPanel.add(radioButton_lightFogOn);
-            radioButton_lightFogOn.setBounds(new Rectangle(new Point(15, 40), radioButton_lightFogOn.getPreferredSize()));
+            radioButton_lightFogOn.setBounds(new Rectangle(new Point(15, 45), radioButton_lightFogOn.getPreferredSize()));
 
             //---- radioButton_lightOutLineMarkOn ----
             radioButton_lightOutLineMarkOn.setText("\u793a\u5eca\u706f");
@@ -419,7 +562,7 @@ public class CarGui extends JFrame {
                 }
             });
             lightPanel.add(radioButton_lightOutLineMarkOn);
-            radioButton_lightOutLineMarkOn.setBounds(new Rectangle(new Point(95, 40), radioButton_lightOutLineMarkOn.getPreferredSize()));
+            radioButton_lightOutLineMarkOn.setBounds(new Rectangle(new Point(95, 45), radioButton_lightOutLineMarkOn.getPreferredSize()));
 
             //---- radioButton_lightHazardWarnOn ----
             radioButton_lightHazardWarnOn.setText("\u5371\u9669\u8b66\u62a5\u706f");
@@ -430,7 +573,7 @@ public class CarGui extends JFrame {
                 }
             });
             lightPanel.add(radioButton_lightHazardWarnOn);
-            radioButton_lightHazardWarnOn.setBounds(new Rectangle(new Point(165, 40), radioButton_lightHazardWarnOn.getPreferredSize()));
+            radioButton_lightHazardWarnOn.setBounds(new Rectangle(new Point(165, 45), radioButton_lightHazardWarnOn.getPreferredSize()));
 
             //---- radioButton_lightTurnSignalOff ----
             radioButton_lightTurnSignalOff.setText("\u5173\u95ed");
@@ -441,7 +584,7 @@ public class CarGui extends JFrame {
                 }
             });
             lightPanel.add(radioButton_lightTurnSignalOff);
-            radioButton_lightTurnSignalOff.setBounds(new Rectangle(new Point(95, 15), radioButton_lightTurnSignalOff.getPreferredSize()));
+            radioButton_lightTurnSignalOff.setBounds(new Rectangle(new Point(95, 20), radioButton_lightTurnSignalOff.getPreferredSize()));
 
             //---- radioButton_lightHighDippedClose ----
             radioButton_lightHighDippedClose.setText("\u5173\u95ed");
@@ -455,7 +598,7 @@ public class CarGui extends JFrame {
             radioButton_lightHighDippedClose.setBounds(new Rectangle(new Point(308, 65), radioButton_lightHighDippedClose.getPreferredSize()));
         }
         contentPane.add(lightPanel);
-        lightPanel.setBounds(310, 60, 435, 100);
+        lightPanel.setBounds(310, 55, 435, 100);
 
         //======== gearPanel ========
         {
@@ -463,36 +606,78 @@ public class CarGui extends JFrame {
 
             //---- radioButton_gearForward ----
             radioButton_gearForward.setText("1\uff08\u524d\u8fdb\uff09\u6321");
+            radioButton_gearForward.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_gearForwardMouseClicked(e);
+                }
+            });
             gearPanel.add(radioButton_gearForward);
             radioButton_gearForward.setBounds(new Rectangle(new Point(10, 37), radioButton_gearForward.getPreferredSize()));
 
             //---- radioButton_gearSecond ----
             radioButton_gearSecond.setText("2\u6863");
+            radioButton_gearSecond.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_gearSecondMouseClicked(e);
+                }
+            });
             gearPanel.add(radioButton_gearSecond);
             radioButton_gearSecond.setBounds(new Rectangle(new Point(10, 117), radioButton_gearSecond.getPreferredSize()));
 
             //---- radioButton_gearThird ----
             radioButton_gearThird.setText("3\u6863");
+            radioButton_gearThird.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_gearThirdMouseClicked(e);
+                }
+            });
             gearPanel.add(radioButton_gearThird);
             radioButton_gearThird.setBounds(new Rectangle(new Point(115, 37), radioButton_gearThird.getPreferredSize()));
 
             //---- radioButton_gearFourth ----
             radioButton_gearFourth.setText("4\u6863");
+            radioButton_gearFourth.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_gearFourthMouseClicked(e);
+                }
+            });
             gearPanel.add(radioButton_gearFourth);
             radioButton_gearFourth.setBounds(new Rectangle(new Point(115, 117), radioButton_gearFourth.getPreferredSize()));
 
             //---- radioButton_gearFifth ----
             radioButton_gearFifth.setText("5\u6863");
+            radioButton_gearFifth.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_gearFifthMouseClicked(e);
+                }
+            });
             gearPanel.add(radioButton_gearFifth);
             radioButton_gearFifth.setBounds(new Rectangle(new Point(190, 37), radioButton_gearFifth.getPreferredSize()));
 
             //---- radioButton_gearReverse ----
             radioButton_gearReverse.setText("-1\uff08\u5012\uff09\u6863");
+            radioButton_gearReverse.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_gearReverseMouseClicked(e);
+                }
+            });
             gearPanel.add(radioButton_gearReverse);
             radioButton_gearReverse.setBounds(new Rectangle(new Point(190, 117), radioButton_gearReverse.getPreferredSize()));
 
             //---- radioButton_gearNeutral ----
             radioButton_gearNeutral.setText("\u7a7a\u6321");
+            radioButton_gearNeutral.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_gearNeutralMouseClicked(e);
+                }
+            });
             gearPanel.add(radioButton_gearNeutral);
             radioButton_gearNeutral.setBounds(new Rectangle(new Point(115, 77), radioButton_gearNeutral.getPreferredSize()));
 
@@ -656,6 +841,12 @@ public class CarGui extends JFrame {
 
             //---- radioButton_obeserveReverseMirror ----
             radioButton_obeserveReverseMirror.setText("\u89c2\u5bdf\u540e\u89c6\u955c");
+            radioButton_obeserveReverseMirror.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    radioButton_obeserveReverseMirrorMouseClicked(e);
+                }
+            });
             otherPanel.add(radioButton_obeserveReverseMirror);
             radioButton_obeserveReverseMirror.setBounds(new Rectangle(new Point(10, 5), radioButton_obeserveReverseMirror.getPreferredSize()));
 
@@ -679,12 +870,12 @@ public class CarGui extends JFrame {
         //---- label1 ----
         label1.setText("\u8f66\u901f\uff1a");
         contentPane.add(label1);
-        label1.setBounds(new Rectangle(new Point(345, 35), label1.getPreferredSize()));
+        label1.setBounds(new Rectangle(new Point(345, 22), label1.getPreferredSize()));
 
         //---- speedLabel ----
-        speedLabel.setText("0km/h");
+        speedLabel.setText("0");
         contentPane.add(speedLabel);
-        speedLabel.setBounds(new Rectangle(new Point(395, 35), speedLabel.getPreferredSize()));
+        speedLabel.setBounds(395, 22, 40, speedLabel.getPreferredSize().height);
 
         //======== steerWheelPanel ========
         {
@@ -837,6 +1028,11 @@ public class CarGui extends JFrame {
         contentPane.add(doorPanel);
         doorPanel.setBounds(10, 355, 145, 75);
 
+        //---- label2 ----
+        label2.setText("km/h");
+        contentPane.add(label2);
+        label2.setBounds(new Rectangle(new Point(445, 22), label2.getPreferredSize()));
+
         contentPane.setPreferredSize(new Dimension(780, 465));
         pack();
         setLocationRelativeTo(getOwner());
@@ -872,6 +1068,8 @@ public class CarGui extends JFrame {
         buttonGroup_step.setSelected(radioButton_acceleratorPedalOff.getModel(), true);
         radioButton_acceleratorPedalOff.setEnabled(false);
 
+        //
+        lightPanel.setBorder(BorderFactory.createTitledBorder("灯光"));
         //左右转向灯组
         buttonGroup_turnSignal = new ButtonGroup();
         buttonGroup_turnSignal.add(radioButton_lightTurnLeftSignalOn);
@@ -894,8 +1092,8 @@ public class CarGui extends JFrame {
         buttonGroup_parkBrake = new ButtonGroup();
         buttonGroup_parkBrake.add(radioButton_parkBrakeOn);
         buttonGroup_parkBrake.add(radioButton_parkBrakeOff);
-        buttonGroup_parkBrake.setSelected(radioButton_parkBrakeOff.getModel(), true);
-        radioButton_parkBrakeOff.setEnabled(false);
+        buttonGroup_parkBrake.setSelected(radioButton_parkBrakeOn.getModel(), true);
+        radioButton_parkBrakeOn.setEnabled(false);
 
         // 挡位组
         gearPanel.setBorder(BorderFactory.createTitledBorder("档位"));
@@ -907,6 +1105,8 @@ public class CarGui extends JFrame {
         buttonGroup_gear.add(radioButton_gearFifth);
         buttonGroup_gear.add(radioButton_gearNeutral);
         buttonGroup_gear.add(radioButton_gearReverse);
+        buttonGroup_gear.setSelected(radioButton_gearNeutral.getModel(), true);
+        radioButton_gearNeutral.setEnabled(false);
 
         // 安全带组
         safetyBeltPanel.setBorder(BorderFactory.createTitledBorder("安全带"));
@@ -924,6 +1124,8 @@ public class CarGui extends JFrame {
         buttonGroup_door.setSelected(radioButton_doorOpen.getModel(), true);
         radioButton_doorOpen.setEnabled(false);
 
+        //速度label文字右对齐
+        speedLabel.setHorizontalAlignment(JTextField.RIGHT);
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
@@ -974,6 +1176,7 @@ public class CarGui extends JFrame {
     private JPanel doorPanel;
     private JRadioButton radioButton_doorOpen;
     private JRadioButton radioButton_doorClose;
+    private JLabel label2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     private ButtonGroup buttonGroup_brake;

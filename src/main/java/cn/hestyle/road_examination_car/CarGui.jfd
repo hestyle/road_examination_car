@@ -19,7 +19,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightDippedOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 15
-					"y": 65
+					"y": 70
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightHighOn"
@@ -27,7 +27,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightHighOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 95
-					"y": 65
+					"y": 70
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightHighDippedOn"
@@ -35,7 +35,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightHighDippedOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 165
-					"y": 65
+					"y": 70
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightTurnLeftSignalOn"
@@ -43,7 +43,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightTurnLeftSignalOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 15
-					"y": 15
+					"y": 20
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightTurnRightSignalOn"
@@ -51,7 +51,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightTurnRightSignalOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 165
-					"y": 15
+					"y": 20
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightFogOn"
@@ -59,7 +59,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightFogOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 15
-					"y": 40
+					"y": 45
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightOutLineMarkOn"
@@ -67,7 +67,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightOutLineMarkOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 95
-					"y": 40
+					"y": 45
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightHazardWarnOn"
@@ -75,7 +75,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightHazardWarnOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 165
-					"y": 40
+					"y": 45
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightTurnSignalOff"
@@ -83,7 +83,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightTurnSignalOffClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 95
-					"y": 15
+					"y": 20
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightHighDippedClose"
@@ -95,7 +95,7 @@ new FormModel {
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 310
-				"y": 60
+				"y": 55
 				"height": 100
 				"width": 435
 			} )
@@ -104,6 +104,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_gearForward"
 					"text": "1（前进）挡"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_gearForwardMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 10
 					"y": 37
@@ -111,6 +112,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_gearSecond"
 					"text": "2档"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_gearSecondMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 10
 					"y": 117
@@ -118,6 +120,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_gearThird"
 					"text": "3档"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_gearThirdMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 115
 					"y": 37
@@ -125,6 +128,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_gearFourth"
 					"text": "4档"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_gearFourthMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 115
 					"y": 117
@@ -132,6 +136,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_gearFifth"
 					"text": "5档"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_gearFifthMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 190
 					"y": 37
@@ -139,6 +144,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_gearReverse"
 					"text": "-1（倒）档"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_gearReverseMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 190
 					"y": 117
@@ -146,6 +152,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_gearNeutral"
 					"text": "空挡"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_gearNeutralMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 115
 					"y": 77
@@ -273,6 +280,7 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_obeserveReverseMirror"
 					"text": "观察后视镜"
+					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_obeserveReverseMirrorMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 10
 					"y": 5
@@ -288,14 +296,15 @@ new FormModel {
 				"text": "车速："
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 345
-				"y": 35
+				"y": 22
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "speedLabel"
-				"text": "0km/h"
+				"text": "0"
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 395
-				"y": 35
+				"y": 22
+				"width": 40
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 				name: "steerWheelPanel"
@@ -387,6 +396,13 @@ new FormModel {
 				"y": 355
 				"height": 75
 				"width": 145
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "km/h"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 445
+				"y": 22
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 90 )
