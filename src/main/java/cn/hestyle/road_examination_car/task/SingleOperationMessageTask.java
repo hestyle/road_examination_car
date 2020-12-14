@@ -32,7 +32,7 @@ public class SingleOperationMessageTask<T> extends BaseMessageTask {
                         outputStream.flush();
                     }
                     byteArrayInputStream.close();
-
+                    System.out.println("发送:"+msg);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

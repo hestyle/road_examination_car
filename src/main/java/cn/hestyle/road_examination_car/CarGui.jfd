@@ -91,7 +91,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightHighDippedCloseMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 308
-					"y": 65
+					"y": 70
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 310
@@ -283,13 +283,13 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_obeserveReverseMirrorMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 10
-					"y": 5
+					"y": 25
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"width": 105
-				"height": 35
-				"x": 10
-				"y": 240
+				"width": 130
+				"height": 55
+				"x": 490
+				"y": 255
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
@@ -314,7 +314,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "button_steerWheelSlightTurnLeftMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 175
-					"y": 5
+					"y": 27
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button_steerWheelModerateTurnLeft"
@@ -322,7 +322,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "button_steerWheelModerateTurnLeftMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 10
-					"y": 5
+					"y": 27
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button_steerWheelSlightTurnRight"
@@ -330,7 +330,7 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "button_steerWheelSlightTurnRightMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 360
-					"y": 5
+					"y": 27
 				} )
 				add( new FormComponent( "javax.swing.JButton" ) {
 					name: "button_steerWheelModerateTurnRight"
@@ -338,13 +338,13 @@ new FormModel {
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "button_steerWheelModerateTurnRightMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 520
-					"y": 5
+					"y": 27
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 10
-				"y": 190
-				"width": 690
-				"height": 35
+				"y": 165
+				"width": 735
+				"height": 60
 			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) ) {
 				name: "safetyBeltPanel"

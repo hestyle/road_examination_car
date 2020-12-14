@@ -3,6 +3,7 @@ package cn.hestyle.road_examination_car.woker;
 import cn.hestyle.road_examination_car.task.BaseMessageTask;
 import cn.hestyle.road_examination_car.entity.MessageTaskQueue;
 
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class MessageHandler extends Thread{
@@ -14,21 +15,6 @@ public class MessageHandler extends Thread{
     private String targetIP;
     private Integer targetPort;
     private Socket socket;
-
-    public MessageHandler(MessageTaskQueue messageTaskQueue, String targetIP, Integer targetPort){
-        this.messageTaskQueue = messageTaskQueue;
-        this.targetIP = targetIP;
-        this.targetPort = targetPort;
-        if(targetIP != null && targetIP != ""){
-            try {
-                socket = new Socket(targetIP, targetPort);
-                //与考试端建立连接
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }
-    }
 
     public MessageHandler(MessageTaskQueue messageTaskQueue, Socket socket){
         this.messageTaskQueue = messageTaskQueue;
