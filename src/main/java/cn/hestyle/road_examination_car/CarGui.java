@@ -1232,19 +1232,11 @@ public class CarGui extends JFrame {
                                     messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂空挡"));
                                     break;
                                 case 1:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂1挡"));
-                                    break;
                                 case 2:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂2挡"));
-                                    break;
                                 case 3:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂3挡"));
-                                    break;
                                 case 4:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂4挡"));
-                                    break;
                                 case 5:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂5挡"));
+                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂"+nextGear+"挡"));
                                     break;
                                 case -1:
                                     messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂倒挡"));
