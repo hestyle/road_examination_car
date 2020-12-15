@@ -99,6 +99,8 @@ public class MainGui extends JFrame {
         // 关闭tcp服务器
         try {
             this.serverSocketHandler.exit = true;
+            this.serverSocketHandler.interrupt();  
+            this.serverSocketHandler.join();
             this.server.close();
         } catch (Exception exception) {
             exception.printStackTrace();
