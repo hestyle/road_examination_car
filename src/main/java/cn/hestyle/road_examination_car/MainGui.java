@@ -282,6 +282,7 @@ public class MainGui extends JFrame {
                         JOptionPane.showMessageDialog(currentFrame, "已成功启动TCP服务！");
                         currentFrame.setVisible(false);
                         CarGui.launch(serverSocket, socket, ois, oos);
+                        break;
                     } else {
                         System.err.println("本车信息不符合规定");
                     }
