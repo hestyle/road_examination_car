@@ -8,33 +8,47 @@ import java.awt.event.*;
 
 import cn.hestyle.road_examination_car.server.TcpRequestHandlerThread;
 import cn.hestyle.road_examination_car.server.TcpServerThread;
+import cn.hestyle.tcp.TcpRequestMessage;
+import cn.hestyle.tcp.TcpResponseMessage;
 import cn.hestyle.road_examination_car.util.LocalNetworkHelp;
-import cn.hestyle.road_examination_car.woker.MessageHandler;
-import com.sun.corba.se.spi.activation.Server;
 
 import java.awt.*;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
+
+import static cn.hestyle.tcp.TcpResponseMessage.RESPONSE_CHECK_IP_AND_MAC;
 
 /**
  * @author hestyle
  */
 public class MainGui extends JFrame {
-    /**tcp服务监听的端口号*/
+    /**
+     * tcp服务监听的端口号
+     */
     public static Integer port = null;
-    /**tcp服务器线程*/
+    /**
+     * tcp服务器线程
+     */
     private static TcpServerThread tcpServerThread = null;
-    /**tcp请求处理线程*/
+    /**
+     * tcp请求处理线程
+     */
     public static TcpRequestHandlerThread tcpRequestHandlerThread = null;
+
     public MainGui() {
         initComponents();
     }
 
     /**
      * startTcpButton点击事件
-     * @param e     点击事件
+     *
+     * @param e 点击事件
      */
     private void startTcpButtonActionPerformed(ActionEvent e) {
         // 端口号字符串转数字
@@ -67,27 +81,25 @@ public class MainGui extends JFrame {
         }
 //        wjl code end
 
-        // disable启动tcp服务的按钮,enable停止tcp服务的按钮
-        this.startTcpButton.setEnabled(false);
-        this.stopTcpButton.setEnabled(true);
-        this.tipsLabel.setText("提示：TCP服务运行中，正在等待连接...");
-
-        Socket socket = null;
-        try {
-            socket = server.accept();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        if(server != null){
+            ServerSocketHandler serverSocketHandler = new ServerSocketHandler(server, this);
+            serverSocketHandler.start();
+            // disable启动tcp服务的按钮,enable停止tcp服务的按钮
+            this.startTcpButton.setEnabled(false);
+            this.stopTcpButton.setEnabled(true);
+            this.tipsLabel.setText("提示：TCP服务运行中，正在等待连接...");
+        }else {
+            JOptionPane.showMessageDialog(this, "TCP服务启动失败！");
         }
 
-        // 弹窗提示
-        JOptionPane.showMessageDialog(this, "已成功启动TCP服务！");
-        this.setVisible(false);
-        CarGui.launch(socket);
+
+
     }
 
     /**
      * stopTcpButton点击事件
-     * @param e     点击事件
+     *
+     * @param e 点击事件
      */
     private void stopTcpButtonActionPerformed(ActionEvent e) {
         // 关闭tcp服务器
@@ -205,6 +217,73 @@ public class MainGui extends JFrame {
     private JButton startTcpButton;
     private JButton stopTcpButton;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
+
+    public static void launch() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainGui().setVisible(true);
+            }
+        });
+    }
+
+
+    class ServerSocketHandler extends Thread{
+        private ServerSocket serverSocket;
+        private JFrame currentFrame;
+        public ServerSocketHandler(ServerSocket serverSocket, JFrame currentFrame){
+            this.serverSocket = serverSocket;
+            this.currentFrame = currentFrame;
+        }
+        public void run(){
+            while (true){
+                Socket socket = null;
+                System.out.println("等待一个连接");
+                try {
+                    socket = serverSocket.accept();
+                    ObjectInputStream ois = null;
+                    ObjectOutputStream oos = null;
+
+                    TcpResponseMessage start = new TcpResponseMessage();
+                    start.setTypeName(TcpResponseMessage.RESPONSE_CHECK_IP_AND_MAC);
+                    oos = new ObjectOutputStream(socket.getOutputStream());
+                    // 发start
+                    oos.writeObject(start);
+                    oos.flush();
+
+                    ois = new ObjectInputStream(socket.getInputStream());
+                    //读考试端发的start
+                    System.err.println(((TcpRequestMessage) ois.readObject()).toString());
+
+                    // 读 考试端发的 获取ip地址的请求
+                    TcpRequestMessage tcpRequestMessage = (TcpRequestMessage) ois.readObject();
+                    System.err.println(tcpRequestMessage.toString());
+                    // 发 ip mac
+                    TcpResponseMessage tcpResponseMessage = new TcpResponseMessage();
+                    tcpResponseMessage.setTypeName(TcpResponseMessage.RESPONSE_CHECK_IP_AND_MAC);
+                    Map<String, String> map = new HashMap<>();
+                    map.put("ipAddress", ipAddressLabel.getText());
+                    map.put("macAddress", macAddressLabel.getText());
+                    tcpResponseMessage.setDataMap(map);
+                    oos.writeObject(tcpResponseMessage);
+                    oos.flush();
+                    System.out.println("发送完成ip地址:" + tcpResponseMessage.toString());
+                    // 读结果
+                    TcpRequestMessage res = (TcpRequestMessage) ois.readObject();
+                    System.err.println(res.toString());
+                    if (res.getTypeName().equals("true")) {
+                        // 弹窗提示
+                        JOptionPane.showMessageDialog(currentFrame, "已成功启动TCP服务！");
+                        currentFrame.setVisible(false);
+                        CarGui.launch(socket, ois, oos);
+                    } else {
+                        System.err.println("本车信息不符合规定");
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
 
     public static void main(String[] args) {
         // 打开主界面

@@ -1,8 +1,5 @@
-package cn.hestyle.road_examination_car.task;
+package cn.hestyle.tcp.task;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
 import java.util.List;
 
 public class OperationsMessageTask<T> extends BaseMessageTask {

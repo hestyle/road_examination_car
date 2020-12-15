@@ -1,14 +1,14 @@
 package cn.hestyle.road_examination_car.entity;
 
-import cn.hestyle.road_examination_car.task.BaseMessageTask;
+import cn.hestyle.tcp.TcpMessage;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class MessageTaskQueue {
-    private List<BaseMessageTask> infoList = new LinkedList<>();
-    public synchronized BaseMessageTask getMessage() {
-        while(infoList.size() == 0) {
+    private List<TcpMessage> tcpMessageList = new LinkedList<>();
+    public synchronized TcpMessage getMessage() {
+        while(tcpMessageList.size() == 0) {
             try {
                 this.wait();
             }catch (InterruptedException e) {
@@ -16,15 +16,15 @@ public class MessageTaskQueue {
                 return null;
             }
         }
-        return infoList.remove(0);
+        return tcpMessageList.remove(0);
     }
 
-    public synchronized void putMessage(BaseMessageTask message) {
-        infoList.add(message);
+    public synchronized void putMessage(TcpMessage message) {
+        tcpMessageList.add(message);
         this.notifyAll();
     }
 
     public Integer size(){
-        return this.infoList.size();
+        return this.tcpMessageList.size();
     }
 }
