@@ -108,7 +108,7 @@ public class MainGui extends JFrame {
     private void stopTcpButtonActionPerformed(ActionEvent e) {
         // 关闭tcp服务器
         try {
-            this.serverSocketHandler.stop();
+            this.serverSocketHandler.exit = true;
             this.server.close();
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -232,6 +232,7 @@ public class MainGui extends JFrame {
 
 
     class ServerSocketHandler extends Thread{
+        public volatile boolean exit = false;
         private ServerSocket serverSocket;
         private JFrame currentFrame;
         public ServerSocketHandler(ServerSocket serverSocket, JFrame currentFrame){
@@ -241,7 +242,7 @@ public class MainGui extends JFrame {
 
 
         public void run(){
-            while (true){
+            while (!exit){
                 Socket socket = null;
                 System.out.println("等待一个连接");
                 try {
