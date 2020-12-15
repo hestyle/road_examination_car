@@ -6,8 +6,6 @@ package cn.hestyle.road_examination_car;
 
 import java.awt.event.*;
 
-import cn.hestyle.road_examination_car.server.TcpRequestHandlerThread;
-import cn.hestyle.road_examination_car.server.TcpServerThread;
 import cn.hestyle.tcp.TcpRequestMessage;
 import cn.hestyle.tcp.TcpResponseMessage;
 import cn.hestyle.road_examination_car.util.LocalNetworkHelp;
@@ -32,14 +30,6 @@ public class MainGui extends JFrame {
      * tcp服务监听的端口号
      */
     public static Integer port = null;
-    /**
-     * tcp服务器线程
-     */
-    private static TcpServerThread tcpServerThread = null;
-    /**
-     * tcp请求处理线程
-     */
-    public static TcpRequestHandlerThread tcpRequestHandlerThread = null;
 
     private ServerSocketHandler serverSocketHandler;
 
@@ -109,6 +99,8 @@ public class MainGui extends JFrame {
         // 关闭tcp服务器
         try {
             this.serverSocketHandler.exit = true;
+            this.serverSocketHandler.interrupt();  
+            this.serverSocketHandler.join();
             this.server.close();
         } catch (Exception exception) {
             exception.printStackTrace();
