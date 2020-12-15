@@ -41,6 +41,10 @@ public class MainGui extends JFrame {
      */
     public static TcpRequestHandlerThread tcpRequestHandlerThread = null;
 
+    private ServerSocketHandler serverSocketHandler;
+
+    private ServerSocket server;
+
     public MainGui() {
         initComponents();
     }
@@ -73,16 +77,16 @@ public class MainGui extends JFrame {
 //        MainGui.tcpServerThread.start();
 
 //        wjl code start
-        ServerSocket server = null;
+        this.server = null;
         try {
-            server = new ServerSocket(port);
+            this.server = new ServerSocket(port);
         } catch (IOException e1) {
             e1.printStackTrace();
         }
 //        wjl code end
 
         if(server != null){
-            ServerSocketHandler serverSocketHandler = new ServerSocketHandler(server, this);
+            serverSocketHandler = new ServerSocketHandler(this.server, this);
             serverSocketHandler.start();
             // disable启动tcp服务的按钮,enable停止tcp服务的按钮
             this.startTcpButton.setEnabled(false);
@@ -104,10 +108,10 @@ public class MainGui extends JFrame {
     private void stopTcpButtonActionPerformed(ActionEvent e) {
         // 关闭tcp服务器
         try {
-            MainGui.tcpServerThread.serverSocket.close();
+            this.serverSocketHandler.stop();
+            this.server.close();
         } catch (Exception exception) {
             exception.printStackTrace();
-            MainGui.tcpServerThread = null;
         }
         // disable启动tcp服务的按钮,enable停止tcp服务的按钮
         this.startTcpButton.setEnabled(true);
@@ -234,6 +238,8 @@ public class MainGui extends JFrame {
             this.serverSocket = serverSocket;
             this.currentFrame = currentFrame;
         }
+
+
         public void run(){
             while (true){
                 Socket socket = null;
@@ -274,7 +280,7 @@ public class MainGui extends JFrame {
                         // 弹窗提示
                         JOptionPane.showMessageDialog(currentFrame, "已成功启动TCP服务！");
                         currentFrame.setVisible(false);
-                        CarGui.launch(socket, ois, oos);
+                        CarGui.launch(serverSocket, socket, ois, oos);
                     } else {
                         System.err.println("本车信息不符合规定");
                     }

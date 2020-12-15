@@ -15,6 +15,7 @@ import java.awt.event.*;
 import java.io.DataOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,10 +25,11 @@ import javax.swing.*;
  * @author hestyle
  */
 public class CarGui extends JFrame {
-    public CarGui(Socket socket, ObjectOutputStream oos, ObjectInputStream ois) {
+    public CarGui(ServerSocket serverSocket, Socket socket, ObjectOutputStream oos, ObjectInputStream ois) {
         this.oos = oos;
         this.ois = ois;
         this.socket = socket;
+        this.serverSocket = serverSocket;
         initComponents();
     }
 
@@ -1256,7 +1258,7 @@ public class CarGui extends JFrame {
         parkBrakeActionHandler.start();
         tcpResponseMessage= new TcpResponseMessage();
 
-        SocketCloseListerner socketCloseListerner = new SocketCloseListerner(socket, oos, ois, this);
+        SocketCloseListerner socketCloseListerner = new SocketCloseListerner(serverSocket, socket, oos, ois, this);
         socketCloseListerner.start();
 
         MessageHandler messageHandler = new MessageHandler(messageTaskQueue, oos);
@@ -1338,6 +1340,7 @@ public class CarGui extends JFrame {
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
     private Socket socket;
+    private ServerSocket serverSocket;
 
 
     private Car car;
@@ -1345,10 +1348,10 @@ public class CarGui extends JFrame {
 
     public static MessageTaskQueue messageTaskQueue = new MessageTaskQueue();
 
-    public static void launch(Socket socket, ObjectInputStream ois, ObjectOutputStream oos) {
+    public static void launch(ServerSocket serverSocket, Socket socket, ObjectInputStream ois, ObjectOutputStream oos) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CarGui(socket, oos, ois).setVisible(true);
+                new CarGui(serverSocket, socket, oos, ois).setVisible(true);
             }
         });
     }
@@ -1596,11 +1599,13 @@ public class CarGui extends JFrame {
         ObjectInputStream ois;
         ObjectOutputStream oos;
         Socket socket;
+        ServerSocket serverSocket;
         Frame currentFrame;
-        public SocketCloseListerner(Socket socket, ObjectOutputStream oos, ObjectInputStream ois, JFrame currentFrame){
+        public SocketCloseListerner(ServerSocket serverSocket, Socket socket, ObjectOutputStream oos, ObjectInputStream ois, JFrame currentFrame){
             this.ois = ois;
             this.oos = oos;
             this.socket = socket;
+            this.serverSocket = serverSocket;
             this.currentFrame = currentFrame;
         }
 
@@ -1613,6 +1618,7 @@ public class CarGui extends JFrame {
                         oos.close();
                         ois.close();
                         socket.close();
+                        serverSocket.close();
                         currentFrame.dispose();
                         MainGui.launch();
                     }
@@ -1634,6 +1640,6 @@ public class CarGui extends JFrame {
     }
 
     public static void main(String[] args) {
-        CarGui.launch(null, null, null);
+        CarGui.launch(null, null, null, null);
     }
 }
