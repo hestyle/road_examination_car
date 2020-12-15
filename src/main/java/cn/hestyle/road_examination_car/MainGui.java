@@ -45,6 +45,9 @@ public class MainGui extends JFrame {
      * @param e 点击事件
      */
     private void startTcpButtonActionPerformed(ActionEvent e) {
+        if(startTcpButton.isEnabled() == false){
+            return;
+        }
         // 端口号字符串转数字
         try {
             Integer tmpPort = Integer.valueOf(this.portTextField.getText());
@@ -70,24 +73,20 @@ public class MainGui extends JFrame {
         this.server = null;
         try {
             this.server = new ServerSocket(port);
+            if(server != null){
+                serverSocketHandler = new ServerSocketHandler(this.server, this);
+                serverSocketHandler.start();
+                // disable启动tcp服务的按钮,enable停止tcp服务的按钮
+                this.startTcpButton.setEnabled(false);
+                this.stopTcpButton.setEnabled(true);
+                this.tipsLabel.setText("提示：TCP服务运行中，正在等待连接...");
+            }else {
+                JOptionPane.showMessageDialog(this, "TCP服务启动失败！");
+            }
         } catch (IOException e1) {
             e1.printStackTrace();
         }
 //        wjl code end
-
-        if(server != null){
-            serverSocketHandler = new ServerSocketHandler(this.server, this);
-            serverSocketHandler.start();
-            // disable启动tcp服务的按钮,enable停止tcp服务的按钮
-            this.startTcpButton.setEnabled(false);
-            this.stopTcpButton.setEnabled(true);
-            this.tipsLabel.setText("提示：TCP服务运行中，正在等待连接...");
-        }else {
-            JOptionPane.showMessageDialog(this, "TCP服务启动失败！");
-        }
-
-
-
     }
 
     /**
@@ -99,8 +98,7 @@ public class MainGui extends JFrame {
         // 关闭tcp服务器
         try {
             this.serverSocketHandler.exit = true;
-            this.serverSocketHandler.interrupt();  
-            this.serverSocketHandler.join();
+            this.serverSocketHandler.stop();
             this.server.close();
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -193,6 +191,7 @@ public class MainGui extends JFrame {
         String ipAddress = LocalNetworkHelp.getLocalIp();
         if (ipAddress == null) {
             JOptionPane.showMessageDialog(this, "ip地址获取错误!");
+            startTcpButton.setEnabled(false);
         }
         String macAddress = LocalNetworkHelp.getMacAddressByIp(ipAddress);
         if (macAddress == null) {
