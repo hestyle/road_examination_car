@@ -1,9 +1,11 @@
 package cn.hestyle.road_examination_car.woker;
 
-import cn.hestyle.road_examination_car.task.BaseMessageTask;
 import cn.hestyle.road_examination_car.entity.MessageTaskQueue;
+import cn.hestyle.tcp.TcpMessage;
 
-import java.net.ServerSocket;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class MessageHandler extends Thread{
@@ -12,13 +14,11 @@ public class MessageHandler extends Thread{
     private boolean stop = false;
     private MessageTaskQueue messageTaskQueue;
 
-    private String targetIP;
-    private Integer targetPort;
-    private Socket socket;
+    private ObjectOutputStream oos;
 
-    public MessageHandler(MessageTaskQueue messageTaskQueue, Socket socket){
+    public MessageHandler(MessageTaskQueue messageTaskQueue, ObjectOutputStream oos){
         this.messageTaskQueue = messageTaskQueue;
-        this.socket = socket;
+        this.oos = oos;
     }
 
     public void shutdown() {
@@ -33,12 +33,21 @@ public class MessageHandler extends Thread{
     }
 
     public void run() {
-        System.out.println("按钮消息处理线程 start.");
+        System.out.println("消息发送 start.");
         while(!stop) {
-            BaseMessageTask message = messageTaskQueue.getMessage();
+            TcpMessage message = messageTaskQueue.getMessage();
             if(message != null) {
-                message.setSocket(socket);
-                message.execute();
+                if(oos != null){
+                    try {
+                        System.out.println("发送消息:"+message.toString());
+                        oos.writeObject(message);
+                        oos.flush();
+                    } catch (IOException e) {
+                        System.err.println("发送数据给考试端失败");
+                    }
+                }else {
+                    System.out.println(message.toString());
+                }
             }
         }
         System.out.println(getName()+" end.");

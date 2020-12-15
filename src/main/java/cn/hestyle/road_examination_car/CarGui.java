@@ -4,85 +4,126 @@
 
 package cn.hestyle.road_examination_car;
 
+import cn.hestyle.road_examination_car.entity.Car;
 import cn.hestyle.road_examination_car.entity.MessageTaskQueue;
-import cn.hestyle.road_examination_car.task.SingleOperationMessageTask;
+import cn.hestyle.tcp.TcpRequestMessage;
+import cn.hestyle.tcp.TcpResponseMessage;
 import cn.hestyle.road_examination_car.woker.MessageHandler;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
+import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.*;
 
 /**
  * @author hestyle
  */
 public class CarGui extends JFrame {
-    public CarGui() {
+    public CarGui(Socket socket, ObjectOutputStream oos, ObjectInputStream ois) {
+        this.oos = oos;
+        this.ois = ois;
+        this.socket = socket;
         initComponents();
     }
 
+    //踩离合
     private void radioButton_clutchPedalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_clutchPedalOn.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("STEP_ON_CLUTCH_PEDAL");
+            sendMessage(temp);
+
             radioButton_clutchPedalOn.setEnabled(false);
             radioButton_clutchPedalOff.setEnabled(true);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("踩离合踏板"));
         }
     }
 
     private void radioButton_clutchPedalOffMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_clutchPedalOff.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("STEP_OFF_CLUTCH_PEDAL");
+            sendMessage(temp);
+
             radioButton_clutchPedalOn.setEnabled(true);
             radioButton_clutchPedalOff.setEnabled(false);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("松开离合踏板"));
         }
     }
 
+    // 踩刹车
     private void radioButton_brakePedalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_brakePedalOn.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("STEP_ON_BRAKE_PEDAL");
+            sendMessage(temp);
+
+            if (radioButton_acceleratorPedalOff.isEnabled()) { // 踩了加速踏板 松开加速踏板
+                radioButton_acceleratorPedalOn.setEnabled(true);
+                radioButton_acceleratorPedalOff.setEnabled(false);
+                buttonGroup_accelerator.setSelected(radioButton_acceleratorPedalOff.getModel(), true);
+            }
             radioButton_brakePedalOn.setEnabled(false);
             radioButton_brakePedalOff.setEnabled(true);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("踩刹车踏板"));
+            synchronized (brakeActionHandler) {
+                brakeActionHandler.notify();
+            }
         }
     }
 
     private void radioButton_brakePedalOffMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_brakePedalOff.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("STEP_OFF_BRAKE_PEDAL");
+            sendMessage(temp);
+
             radioButton_brakePedalOn.setEnabled(true);
             radioButton_brakePedalOff.setEnabled(false);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("松开刹车踏板"));
         }
     }
 
+    // 踩加速踏板
     private void radioButton_acceleratorPedalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_acceleratorPedalOn.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("LIGHT_STEP_ON_ACCELERATOR_PEDAL");
+            sendMessage(temp);
+
+            if (radioButton_brakePedalOff.isEnabled()) { // 踩了刹车踏板 松开刹车踏板
+                radioButton_brakePedalOn.setEnabled(true);
+                radioButton_brakePedalOff.setEnabled(false);
+                buttonGroup_brake.setSelected(radioButton_brakePedalOff.getModel(), true);
+            }
             radioButton_acceleratorPedalOn.setEnabled(false);
             radioButton_acceleratorPedalOff.setEnabled(true);
-            synchronized (acceleratorActionHandler){
+
+            synchronized (acceleratorActionHandler) {
                 acceleratorActionHandler.notify();
             }
         }
     }
 
+    // 松开加速踏板
     private void radioButton_acceleratorPedalOffMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_acceleratorPedalOff.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("STEP_OFF_ACCELERATOR_PEDAL");
+            sendMessage(temp);
+
             radioButton_acceleratorPedalOn.setEnabled(true);
             radioButton_acceleratorPedalOff.setEnabled(false);
 
-            if(acceleratorActionHandler.isWaittingGear()){
-                synchronized (acceleratorActionHandler){
+            if (acceleratorActionHandler.isWaittingGear() || acceleratorActionHandler.isWaittingParkBrakeOff()) {
+                synchronized (acceleratorActionHandler) {
                     acceleratorActionHandler.notify();
                 }
             }
@@ -93,12 +134,14 @@ public class CarGui extends JFrame {
     private void radioButton_lightDippedOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightDippedOn.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_ON_DIPPED_LIGHT");
+            sendMessage(temp);
+
             radioButton_lightDippedOn.setEnabled(false);
             radioButton_lightHighDippedClose.setEnabled(true);
             radioButton_lightHighOn.setEnabled(true);
             radioButton_lightHighDippedOn.setEnabled(true);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("开启近光灯"));
         }
     }
 
@@ -106,12 +149,14 @@ public class CarGui extends JFrame {
     private void radioButton_lightHighOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightHighOn.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_ON_HIGH_LIGHT");
+            sendMessage(temp);
+
             radioButton_lightHighOn.setEnabled(false);
             radioButton_lightHighDippedClose.setEnabled(true);
             radioButton_lightDippedOn.setEnabled(true);
             radioButton_lightHighDippedOn.setEnabled(true);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("开启远光灯"));
         }
     }
 
@@ -119,12 +164,14 @@ public class CarGui extends JFrame {
     private void radioButton_lightHighDippedOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightHighDippedOn.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_ON_HIGH_DIPPED_LIGHT");
+            sendMessage(temp);
+
             radioButton_lightHighDippedOn.setEnabled(false);
             radioButton_lightHighDippedClose.setEnabled(true);
             radioButton_lightHighOn.setEnabled(true);
             radioButton_lightDippedOn.setEnabled(true);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("远近灯光交替"));
         }
     }
 
@@ -132,13 +179,15 @@ public class CarGui extends JFrame {
     private void radioButton_lightHighDippedCloseMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightHighDippedClose.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_OFF_ALL_LIGHT");
+            sendMessage(temp);
+
             buttonGroup_highDipped.clearSelection();
             radioButton_lightHighDippedClose.setEnabled(false);
             radioButton_lightHighDippedOn.setEnabled(true);
             radioButton_lightHighOn.setEnabled(true);
             radioButton_lightDippedOn.setEnabled(true);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("关闭大灯"));
         }
     }
 
@@ -146,11 +195,13 @@ public class CarGui extends JFrame {
     private void radioButton_lightTurnLeftSignalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightTurnLeftSignalOn.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_ON_LEFT_TURN_SIGNAL");
+            sendMessage(temp);
+
             radioButton_lightTurnLeftSignalOn.setEnabled(false);
             radioButton_lightTurnSignalOff.setEnabled(true);
             radioButton_lightTurnRightSignalOn.setEnabled(true);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("打左转向灯"));
         }
     }
 
@@ -158,11 +209,13 @@ public class CarGui extends JFrame {
     private void radioButton_lightTurnRightSignalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightTurnRightSignalOn.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_ON_RIHGT_TURN_SIGNAL");
+            sendMessage(temp);
+
             radioButton_lightTurnRightSignalOn.setEnabled(false);
             radioButton_lightTurnSignalOff.setEnabled(true);
             radioButton_lightTurnLeftSignalOn.setEnabled(true);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("打右转向灯"));
         }
     }
 
@@ -170,12 +223,14 @@ public class CarGui extends JFrame {
     private void radioButton_lightTurnSignalOffClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightTurnSignalOff.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_OFF_ALL_LIGHT");
+            sendMessage(temp);
+
             radioButton_lightTurnSignalOff.setEnabled(false);
             radioButton_lightTurnRightSignalOn.setEnabled(true);
             radioButton_lightTurnLeftSignalOn.setEnabled(true);
             buttonGroup_turnSignal.clearSelection();
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("关闭转向灯"));
         }
     }
 
@@ -183,9 +238,13 @@ public class CarGui extends JFrame {
     private void radioButton_lightFogOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightFogOn.isSelected()) {
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("打开雾灯"));
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_ON_FOG_LIGHT");
+            sendMessage(temp);
         } else {
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("关闭雾灯"));
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_OFF_ALL_LIGHT");
+            sendMessage(temp);
         }
     }
 
@@ -193,9 +252,13 @@ public class CarGui extends JFrame {
     private void radioButton_lightOutLineMarkOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightOutLineMarkOn.isSelected()) {
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("打开示廓灯"));
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_ON_OUTLINE_MARK_LIGHT");
+            sendMessage(temp);
         } else {
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("关闭示廓灯"));
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_OFF_ALL_LIGHT");
+            sendMessage(temp);
         }
     }
 
@@ -203,9 +266,13 @@ public class CarGui extends JFrame {
     private void radioButton_lightHazardWarnOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightHazardWarnOn.isSelected()) {
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("打开危险报警灯"));
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_ON_HAZARD_WARN_LIGHT");
+            sendMessage(temp);
         } else {
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("关闭危险报警灯"));
+            List<String> temp = new LinkedList<>();
+            temp.add("TURN_OFF_ALL_LIGHT");
+            sendMessage(temp);
         }
     }
 
@@ -221,10 +288,12 @@ public class CarGui extends JFrame {
     private void radioButton_safetyBeltOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_safetyBeltOn.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("绑安全带");
+            sendMessage(temp);
+
             radioButton_safetyBeltOn.setEnabled(false);
             radioButton_safetyBeltOff.setEnabled(true);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("绑安全带"));
         }
     }
 
@@ -232,11 +301,12 @@ public class CarGui extends JFrame {
     private void radioButton_safetyBeltOffMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_safetyBeltOff.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("解安全带");
+            sendMessage(temp);
+
             radioButton_safetyBeltOn.setEnabled(true);
             radioButton_safetyBeltOff.setEnabled(false);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("解安全带"));
-
         }
     }
 
@@ -244,10 +314,12 @@ public class CarGui extends JFrame {
     private void radioButton_doorCloseMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_doorClose.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("关闭车门");
+            sendMessage(temp);
+
             radioButton_doorClose.setEnabled(false);
             radioButton_doorOpen.setEnabled(true);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("关闭车门"));
         }
     }
 
@@ -255,10 +327,12 @@ public class CarGui extends JFrame {
     private void radioButton_doorOpenMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_doorOpen.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("打开车门");
+            sendMessage(temp);
+
             radioButton_doorClose.setEnabled(true);
             radioButton_doorOpen.setEnabled(false);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("打开车门"));
         }
     }
 
@@ -266,10 +340,15 @@ public class CarGui extends JFrame {
     private void radioButton_parkBrakeOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_parkBrakeOn.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("PULL_UP_PARK_BRAKE");
+            sendMessage(temp);
+
             radioButton_parkBrakeOn.setEnabled(false);
             radioButton_parkBrakeOff.setEnabled(true);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("拉手刹"));
+            synchronized (parkBrakeActionHandler) {
+                parkBrakeActionHandler.notify();
+            }
         }
     }
 
@@ -277,37 +356,50 @@ public class CarGui extends JFrame {
     private void radioButton_parkBrakeOffMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_parkBrakeOff.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("PULL_DOWN_PARK_BRAKE");
+            sendMessage(temp);
+
             radioButton_parkBrakeOn.setEnabled(true);
             radioButton_parkBrakeOff.setEnabled(false);
-
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("放手刹"));
         }
     }
 
     private void button_steerWheelModerateTurnLeftMouseClicked(MouseEvent e) {
         // TODO add your code here
-        messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("左打方向盘一圈"));
+        List<String> temp = new LinkedList<>();
+        temp.add("STEER_WHEEL_MODERATE_TURN_LEFT");
+        sendMessage(temp);
     }
 
     private void button_steerWheelSlightTurnLeftMouseClicked(MouseEvent e) {
         // TODO add your code here
-        messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("左打方向盘半圈"));
+        List<String> temp = new LinkedList<>();
+        temp.add("STEER_WHEEL_SLIGHT_TURN_LEFT");
+        sendMessage(temp);
     }
 
     private void button_steerWheelSlightTurnRightMouseClicked(MouseEvent e) {
         // TODO add your code here
-        messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("右转方向盘半圈"));
+        List<String> temp = new LinkedList<>();
+        temp.add("STEER_WHEEL_SLIGHT_TURN_RIGHT");
+        sendMessage(temp);
     }
 
     private void button_steerWheelModerateTurnRightMouseClicked(MouseEvent e) {
         // TODO add your code here
-        messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("右转方向盘一圈"));
+        List<String> temp = new LinkedList<>();
+        temp.add("STEER_WHEEL_MODERATE_TURN_RIGHT");
+        sendMessage(temp);
     }
 
     private void radioButton_obeserveReverseMirrorMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_obeserveReverseMirror.isSelected()) {
-            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("观察后视镜"));
+            List<String> temp = new LinkedList<>();
+            temp.add("OBSERVE_REARVIEW_MIRROR");
+            sendMessage(temp);
+
             radioButton_obeserveReverseMirror.setSelected(false);
         }
     }
@@ -317,9 +409,13 @@ public class CarGui extends JFrame {
         // TODO add your code here
         // 踩离合状态 radioButton_clutchPedalOn.isEnabled() == false
         if (radioButton_gearNeutral.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp);
+
             nextGear = 0;
             nextGearButton = radioButton_gearNeutral;
-            synchronized (gearActionHandler){
+            synchronized (gearActionHandler) {
                 gearActionHandler.notify();
             }
 
@@ -332,9 +428,13 @@ public class CarGui extends JFrame {
     private void radioButton_gearForwardMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearForward.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_FORWARD_GEAR");
+            sendMessage(temp);
+
             nextGear = 1;
             nextGearButton = radioButton_gearForward;
-            synchronized (gearActionHandler){
+            synchronized (gearActionHandler) {
                 gearActionHandler.notify();
             }
 
@@ -347,9 +447,13 @@ public class CarGui extends JFrame {
     private void radioButton_gearSecondMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearSecond.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_SECOND_GEAR");
+            sendMessage(temp);
+
             nextGear = 2;
             nextGearButton = radioButton_gearSecond;
-            synchronized (gearActionHandler){
+            synchronized (gearActionHandler) {
                 gearActionHandler.notify();
             }
 
@@ -362,9 +466,13 @@ public class CarGui extends JFrame {
     private void radioButton_gearThirdMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearThird.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_THIRD_GEAR");
+            sendMessage(temp);
+
             nextGear = 3;
             nextGearButton = radioButton_gearThird;
-            synchronized (gearActionHandler){
+            synchronized (gearActionHandler) {
                 gearActionHandler.notify();
             }
 
@@ -377,9 +485,13 @@ public class CarGui extends JFrame {
     private void radioButton_gearFourthMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearFourth.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_FOURTH_GEAR");
+            sendMessage(temp);
+
             nextGear = 4;
             nextGearButton = radioButton_gearFourth;
-            synchronized (gearActionHandler){
+            synchronized (gearActionHandler) {
                 gearActionHandler.notify();
             }
 
@@ -392,9 +504,13 @@ public class CarGui extends JFrame {
     private void radioButton_gearFifthMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearFifth.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_FIFTH_GEAR");
+            sendMessage(temp);
+
             nextGear = 5;
             nextGearButton = radioButton_gearFifth;
-            synchronized (gearActionHandler){
+            synchronized (gearActionHandler) {
                 gearActionHandler.notify();
             }
 
@@ -407,9 +523,13 @@ public class CarGui extends JFrame {
     private void radioButton_gearReverseMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearReverse.isEnabled()) {
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_REVERSE_GEAR");
+            sendMessage(temp);
+
             nextGear = -1;
             nextGearButton = radioButton_gearReverse;
-            synchronized (gearActionHandler){
+            synchronized (gearActionHandler) {
                 gearActionHandler.notify();
             }
 
@@ -676,7 +796,7 @@ public class CarGui extends JFrame {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < gearPanel.getComponentCount(); i++) {
+                for (int i = 0; i < gearPanel.getComponentCount(); i++) {
                     Rectangle bounds = gearPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -813,7 +933,7 @@ public class CarGui extends JFrame {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < parkBrakePanel.getComponentCount(); i++) {
+                for (int i = 0; i < parkBrakePanel.getComponentCount(); i++) {
                     Rectangle bounds = parkBrakePanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -845,7 +965,7 @@ public class CarGui extends JFrame {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < otherPanel.getComponentCount(); i++) {
+                for (int i = 0; i < otherPanel.getComponentCount(); i++) {
                     Rectangle bounds = otherPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -920,7 +1040,7 @@ public class CarGui extends JFrame {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < steerWheelPanel.getComponentCount(); i++) {
+                for (int i = 0; i < steerWheelPanel.getComponentCount(); i++) {
                     Rectangle bounds = steerWheelPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -963,7 +1083,7 @@ public class CarGui extends JFrame {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < safetyBeltPanel.getComponentCount(); i++) {
+                for (int i = 0; i < safetyBeltPanel.getComponentCount(); i++) {
                     Rectangle bounds = safetyBeltPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1006,7 +1126,7 @@ public class CarGui extends JFrame {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < doorPanel.getComponentCount(); i++) {
+                for (int i = 0; i < doorPanel.getComponentCount(); i++) {
                     Rectangle bounds = doorPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1055,10 +1175,10 @@ public class CarGui extends JFrame {
         // 加速踏板panel绘制边框
         acceleratorPedalPanel.setBorder(BorderFactory.createTitledBorder("加速踏板"));
         // 加速踏板状态按钮组
-        buttonGroup_step = new ButtonGroup();
-        buttonGroup_step.add(radioButton_acceleratorPedalOn);
-        buttonGroup_step.add(radioButton_acceleratorPedalOff);
-        buttonGroup_step.setSelected(radioButton_acceleratorPedalOff.getModel(), true);
+        buttonGroup_accelerator = new ButtonGroup();
+        buttonGroup_accelerator.add(radioButton_acceleratorPedalOn);
+        buttonGroup_accelerator.add(radioButton_acceleratorPedalOff);
+        buttonGroup_accelerator.setSelected(radioButton_acceleratorPedalOff.getModel(), true);
         radioButton_acceleratorPedalOff.setEnabled(false);
 
         //
@@ -1128,8 +1248,19 @@ public class CarGui extends JFrame {
         // other
         otherPanel.setBorder((BorderFactory.createTitledBorder("杂项")));
 
+        car = Car.getInstance();
+
         gearActionHandler.start();
         acceleratorActionHandler.start();
+        brakeActionHandler.start();
+        parkBrakeActionHandler.start();
+        tcpResponseMessage= new TcpResponseMessage();
+
+        SocketCloseListerner socketCloseListerner = new SocketCloseListerner(socket, oos, ois, this);
+        socketCloseListerner.start();
+
+        MessageHandler messageHandler = new MessageHandler(messageTaskQueue, oos);
+        messageHandler.start();
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
@@ -1185,7 +1316,7 @@ public class CarGui extends JFrame {
 
     private ButtonGroup buttonGroup_brake;
     private ButtonGroup buttonGroup_clutch;
-    private ButtonGroup buttonGroup_step;
+    private ButtonGroup buttonGroup_accelerator;
     private ButtonGroup buttonGroup_turnSignal;
     private ButtonGroup buttonGroup_highDipped;
     private ButtonGroup buttonGroup_parkBrake;
@@ -1200,17 +1331,24 @@ public class CarGui extends JFrame {
 
     private GearActionHandler gearActionHandler = new GearActionHandler();
     private AcceleratorActionHandler acceleratorActionHandler = new AcceleratorActionHandler();
-    private Lock gearActionHandlerLock = new ReentrantLock();
+    private BrakeActionHandler brakeActionHandler = new BrakeActionHandler();
+    private ParkBrakeActionHandler parkBrakeActionHandler = new ParkBrakeActionHandler();
+    private TcpResponseMessage tcpResponseMessage;
+
+    private ObjectOutputStream oos;
+    private ObjectInputStream ois;
+    private Socket socket;
+
+
+    private Car car;
+
 
     public static MessageTaskQueue messageTaskQueue = new MessageTaskQueue();
 
-    public static void launch(Socket socket) {
+    public static void launch(Socket socket, ObjectInputStream ois, ObjectOutputStream oos) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                MessageHandler messageHandler = null;
-                messageHandler = new MessageHandler(messageTaskQueue, socket);
-                messageHandler.start();
-                new CarGui().setVisible(true);
+                new CarGui(socket, oos, ois).setVisible(true);
             }
         });
     }
@@ -1226,13 +1364,13 @@ public class CarGui extends JFrame {
         public void run() {
             while (true) {
                 try {
-                    synchronized (this){
+                    synchronized (this) {
                         this.wait();
                     }
                     busy = true;
                     // 进行判断
                     if (radioButton_clutchPedalOff.isEnabled()) { //踩了离合
-                        if((lastGear == -1 && nextGear == 1) || nextGear == -1 || nextGear == 0 || Math.abs(lastGear - nextGear) == 1){ // 可以挂挡
+                        if ((lastGear == -1 && nextGear == 1) || nextGear == -1 || nextGear == 0 || Math.abs(lastGear - nextGear) == 1) { // 可以挂挡
                             nextGearButton.setEnabled(false);
                             lastGearButton.setEnabled(true);
                             buttonGroup_gear.clearSelection();
@@ -1241,8 +1379,8 @@ public class CarGui extends JFrame {
                             lastGearButton = nextGearButton;
 
                             // 唤醒加速处理线程
-                            if(acceleratorActionHandler.isWaittingGear()){
-                                synchronized (acceleratorActionHandler){
+                            if (acceleratorActionHandler.isWaittingGear()) {
+                                synchronized (acceleratorActionHandler) {
                                     acceleratorActionHandler.notify();
                                 }
                             }
@@ -1250,35 +1388,40 @@ public class CarGui extends JFrame {
                             buttonGroup_gear.setSelected(nextGearButton.getModel(), true);
                             switch (nextGear) {
                                 case 0:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂空挡"));
+//                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂空挡"));
+                                    System.out.println("挂空挡");
                                     break;
                                 case 1:
                                 case 2:
                                 case 3:
                                 case 4:
                                 case 5:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂"+nextGear+"挡"));
+//                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂"+nextGear+"挡"));
+                                    System.out.println("挂" + nextGear + "挡");
                                     break;
                                 case -1:
-                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂倒挡"));
+//                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂倒挡"));
+                                    System.out.println("挂倒挡");
                                     break;
                             }
-                        }else {
+                        } else {
                             buttonGroup_gear.clearSelection();
                             nextGearButton.setSelected(false);
                             buttonGroup_gear.setSelected(lastGearButton.getModel(), true);
-                            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("越级挂挡"));
+//                            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("越级挂挡"));
+                            System.err.println("越级挂挡");
                         }
 
-                    }else { // 没踩离合
+                    } else { // 没踩离合
                         buttonGroup_gear.clearSelection();
                         nextGearButton.setSelected(false);
                         buttonGroup_gear.setSelected(lastGearButton.getModel(), true);
-                        messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("未踩离合挂挡"));
+//                        messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("未踩离合挂挡"));
+                        System.err.println("未踩离合挂挡");
                     }
                     // 结束判断
                     busy = false;
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -1286,9 +1429,10 @@ public class CarGui extends JFrame {
     }
 
     // 加速踏板处理线程
-    class AcceleratorActionHandler extends Thread{
+    class AcceleratorActionHandler extends Thread {
         private Boolean busy = false;
         private Boolean waittingGear = false;
+        private Boolean waittingParkBrakeOff = false;
 
         public Boolean isBusy() {
             return busy;
@@ -1298,42 +1442,198 @@ public class CarGui extends JFrame {
             return waittingGear;
         }
 
-        public void run(){
+        public Boolean isWaittingParkBrakeOff() {
+            return waittingParkBrakeOff;
+        }
+
+        public void run() {
+            Double speed = Double.valueOf(speedLabel.getText());
             while (true) {
                 busy = false;
                 try {
-                    synchronized (this){
+                    synchronized (this) {
                         this.wait();
                     }
                     busy = true;
-                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("踩加速踏板"));
-                    while (true){
-                        if (radioButton_acceleratorPedalOn.isEnabled() == false) { // 踩了加速踏板
-                            if (radioButton_gearNeutral.isEnabled()) { // 挂了挡
-                                Double speed = Double.valueOf(speedLabel.getText());
-                                speed += 0.5;
-                                speedLabel.setText(speed.toString());
-                                sleep(150);
-                            }else {
-                                messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("空挡踩加速踏板"));
-                                waittingGear = true;
-                                synchronized (this){
-                                    this.wait();
-                                }
+//                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("踩加速踏板"));
+                    System.out.println("踩加速踏板");
+                    waittingParkBrakeOff = false;
+                    waittingGear = false;
+                    while (radioButton_acceleratorPedalOn.isEnabled() == false) { //踩加速踏板状态
+                        if (radioButton_gearNeutral.isEnabled() && radioButton_parkBrakeOn.isEnabled()) { // 挂了挡，没拉手刹
+                            speed = Double.valueOf(speedLabel.getText());
+                            speed += 0.5;
+                            speedLabel.setText(String.format("%.2f", speed));
+                            sleep(150);
+                        } else if(radioButton_gearNeutral.isEnabled() == false && radioButton_parkBrakeOn.isEnabled() == false) { // 空挡，拉手刹
+//                                messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("空挡踩加速踏板"));
+                            System.err.println("空挡 拉手刹 踩加速踏板");
+                            busy = false;
+                            waittingGear = true;
+                            waittingParkBrakeOff = true;
+                            synchronized (this) {
+                                this.wait();
                             }
-                        } else { // 松开加速踏板
-                            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("松开加速踏板"));
-                            break;
+                        } else if(radioButton_gearNeutral.isEnabled() == false && radioButton_parkBrakeOn.isEnabled()) {// 空挡，没拉手刹
+                            System.err.println("空挡 踩加速踏板");
+                            busy = false;
+                            waittingGear = true;
+                            synchronized (this) {
+                                this.wait();
+                            }
+                        } else if(radioButton_gearNeutral.isEnabled() && radioButton_parkBrakeOn.isEnabled() == false){ // 挂挡 拉手刹
+                            System.err.println("拉手刹 踩加速踏板");
+                            busy = false;
+                            waittingParkBrakeOff = true;
+                            synchronized (this) {
+                                this.wait();
+                            }
                         }
                     }
-                }catch (Exception e){
+//                  messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("松开加速踏板"));
+                    System.out.println("松开加速踏板");
+                    List<String> temp = new LinkedList<>();
+                    temp.add("SPEED:" + String.format("%.2f", speed));
+                    sendMessage(temp);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
     }
 
-    public static void main(String[] args){
-            CarGui.launch(null);
+    // 刹车踏板处理线程
+    class BrakeActionHandler extends Thread {
+        private Boolean busy = false;
+
+        public Boolean isBusy() {
+            return busy;
+        }
+
+        public void run() {
+            Double speed = Double.valueOf(speedLabel.getText());
+            while (true) {
+                busy = false;
+                try {
+                    synchronized (this) {
+                        this.wait();
+                    }
+                    System.out.println("踩刹车踏板");
+                    busy = true;
+                    while (radioButton_brakePedalOn.isEnabled() == false) { // 踩刹车踏板
+                        // 读速度
+                        speed = Double.valueOf(speedLabel.getText());
+                        if (speed > 0) {
+                            speed -= 0.5;
+                        }
+                        speedLabel.setText(String.format("%.2f", speed));
+                        sleep(100);
+                    }
+                    System.out.println("松开刹车踏板");
+
+                    List<String> temp = new LinkedList<>();
+                    temp.add("SPEED:" + String.format("%.2f", speed));
+                    sendMessage(temp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+
+    }
+
+    // 手刹处理线程
+    class ParkBrakeActionHandler extends Thread {
+        Boolean busy = false;
+
+        public Boolean isBusy() {
+            return busy;
+        }
+
+        public void run() {
+            Double speed = Double.valueOf(speedLabel.getText());
+            while (true) {
+                try {
+                    busy = true;
+                    Boolean flag = true;
+                    while (radioButton_parkBrakeOn.isEnabled() == false) { // 拉手刹状态
+                        // 读速度
+                        speed = Double.valueOf(speedLabel.getText());
+                        if (speed > 0) {
+                            speed -= 0.5;
+                        }
+                        speedLabel.setText(String.format("%.2f", speed));
+                        sleep(60);
+                    }
+                    System.out.println("放手刹");
+                    // 唤醒加速处理线程
+                    if (acceleratorActionHandler.isWaittingParkBrakeOff()) {
+                        synchronized (acceleratorActionHandler) {
+                            acceleratorActionHandler.notify();
+                        }
+                    }
+                    List<String> temp = new LinkedList<>();
+                    temp.add("SPEED:" + String.format("%.2f", speed));
+                    sendMessage(temp);
+
+                    busy = false;
+                    synchronized (this) {
+                        this.wait();
+                    }
+                    System.out.println("拉手刹");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    // 考试结束处理
+    class SocketCloseListerner extends Thread{
+        ObjectInputStream ois;
+        ObjectOutputStream oos;
+        Socket socket;
+        Frame currentFrame;
+        public SocketCloseListerner(Socket socket, ObjectOutputStream oos, ObjectInputStream ois, JFrame currentFrame){
+            this.ois = ois;
+            this.oos = oos;
+            this.socket = socket;
+            this.currentFrame = currentFrame;
+        }
+
+        public void run(){
+            try {
+                while (true){
+                    TcpRequestMessage tcpRequestMessage = (TcpRequestMessage) ois.readObject();
+
+                    if(tcpRequestMessage.getTypeName().equals(TcpRequestMessage.REQUEST_TCP_CONNECT_CLOSE)){
+                        oos.close();
+                        ois.close();
+                        socket.close();
+                        currentFrame.dispose();
+                        MainGui.launch();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("读考试端发送的数据失败");
+                this.interrupt();
+            }
+        }
+    }
+
+    private void sendMessage(List<String> examItemOperationNameList){
+        tcpResponseMessage= new TcpResponseMessage();
+//        tcpResponseMessage.setTypeName(TcpResponseMessage.RESPONSE_CHECK_IP_AND_MAC);
+        tcpResponseMessage.setExamItemOperationName(examItemOperationNameList);
+
+        messageTaskQueue.putMessage(tcpResponseMessage);
+    }
+
+    public static void main(String[] args) {
+        CarGui.launch(null, null, null);
     }
 }
