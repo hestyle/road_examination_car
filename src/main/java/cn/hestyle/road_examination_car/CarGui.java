@@ -33,6 +33,7 @@ public class CarGui extends JFrame implements WindowListener {
         initComponents();
     }
 
+
     //踩离合
     private void radioButton_clutchPedalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
@@ -1549,9 +1550,8 @@ public class CarGui extends JFrame implements WindowListener {
 
             }
         }
-
-
     }
+
 
     // 手刹处理线程
     class ParkBrakeActionHandler extends Thread {
@@ -1606,8 +1606,8 @@ public class CarGui extends JFrame implements WindowListener {
         ObjectOutputStream oos;
         Socket socket;
         ServerSocket serverSocket;
-        JFrame currentFrame;
-        public MessageListener(ServerSocket serverSocket, Socket socket, ObjectOutputStream oos, ObjectInputStream ois, JFrame currentFrame){
+        CarGui currentFrame;
+        public MessageListener(ServerSocket serverSocket, Socket socket, ObjectOutputStream oos, ObjectInputStream ois, CarGui currentFrame){
             this.ois = ois;
             this.oos = oos;
             this.socket = socket;
@@ -1617,11 +1617,10 @@ public class CarGui extends JFrame implements WindowListener {
 
         public void run(){
             try {
-                while (true){
+                while (socket.isClosed() == false){
                     TcpRequestMessage tcpRequestMessage = (TcpRequestMessage) ois.readObject();
 
                     if(tcpRequestMessage.getTypeName().equals(TcpRequestMessage.REQUEST_TCP_CONNECT_CLOSE)){
-
                         oos.close();
                         ois.close();
                         socket.close();
@@ -1634,7 +1633,16 @@ public class CarGui extends JFrame implements WindowListener {
                 e.printStackTrace();
                 System.err.println("读考试端发送的数据失败");
             }
+            System.out.println("退出while循环");
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            currentFrame.setVisible(false);
+            MainGui.launch(true);
         }
+
     }
 
     private void sendMessage(List<String> examItemOperationNameList){
@@ -1655,13 +1663,9 @@ public class CarGui extends JFrame implements WindowListener {
         try {
             this.messageListener.stop();
             this.messageSender.stop();
-            if( this.ois != null)
-                this.ois.close();
-            if(this.oos != null)
-                this.oos.close();
-            if(this.socket != null)
+            if(this.socket != null && this.socket.isClosed() == false)
                 this.socket.close();
-            if(this.serverSocket != null)
+            if(this.serverSocket != null && this.serverSocket.isClosed() == false)
                 this.serverSocket.close();
             this.dispose();
             MainGui.launch(true);

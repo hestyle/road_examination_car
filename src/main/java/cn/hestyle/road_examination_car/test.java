@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class test {
     public static void main(String[] args){
         try {
-            Socket socket = new Socket("192.168.31.38", 10101);
+            Socket socket = new Socket("192.168.137.1", 10101);
 
             ObjectInputStream ois = null;
             ObjectOutputStream oos = null;
@@ -40,9 +40,10 @@ public class test {
             oos.writeObject(ok);
             oos.flush();
 
-
-            Scanner in = new Scanner(System.in);
-            Integer end = in.nextInt();
+            while (true){
+                TcpResponseMessage msg = (TcpResponseMessage) ois.readObject();
+                System.out.println(msg.toString());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
