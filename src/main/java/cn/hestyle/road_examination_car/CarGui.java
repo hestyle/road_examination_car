@@ -63,15 +63,19 @@ public class CarGui extends JFrame implements WindowListener {
     private void radioButton_brakePedalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_brakePedalOn.isEnabled()) {
-            List<String> temp = new LinkedList<>();
-            temp.add("STEP_ON_BRAKE_PEDAL");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            if(radioButton_acceleratorPedalOff.isEnabled()){
+                List<String> temp = new LinkedList<>();
+                temp.add("STEP_OFF_ACCELERATOR_PEDAL");
+                sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
-            if (radioButton_acceleratorPedalOff.isEnabled()) { // 踩了加速踏板 松开加速踏板
                 radioButton_acceleratorPedalOn.setEnabled(true);
                 radioButton_acceleratorPedalOff.setEnabled(false);
                 buttonGroup_accelerator.setSelected(radioButton_acceleratorPedalOff.getModel(), true);
             }
+            List<String> temp = new LinkedList<>();
+            temp.add("STEP_ON_BRAKE_PEDAL");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
             radioButton_brakePedalOn.setEnabled(false);
             radioButton_brakePedalOff.setEnabled(true);
             synchronized (brakeActionHandler) {
@@ -96,15 +100,19 @@ public class CarGui extends JFrame implements WindowListener {
     private void radioButton_acceleratorPedalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_acceleratorPedalOn.isEnabled()) {
-            List<String> temp = new LinkedList<>();
-            temp.add("LIGHT_STEP_ON_ACCELERATOR_PEDAL");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            if (radioButton_brakePedalOff.isEnabled()) {
+                List<String> temp = new LinkedList<>();
+                temp.add("STEP_OFF_BRAKE_PEDAL");
+                sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
-            if (radioButton_brakePedalOff.isEnabled()) { // 踩了刹车踏板 松开刹车踏板
                 radioButton_brakePedalOn.setEnabled(true);
                 radioButton_brakePedalOff.setEnabled(false);
                 buttonGroup_brake.setSelected(radioButton_brakePedalOff.getModel(), true);
             }
+            List<String> temp = new LinkedList<>();
+            temp.add("LIGHT_STEP_ON_ACCELERATOR_PEDAL");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
             radioButton_acceleratorPedalOn.setEnabled(false);
             radioButton_acceleratorPedalOff.setEnabled(true);
 
