@@ -33,7 +33,7 @@ public class MessageSender extends Thread{
     }
 
     public void run() {
-        System.out.println("消息发送 start.");
+        System.out.println("消息发送 start");
         while(!stop) {
             TcpMessage message = messageTaskQueue.getMessage();
             if(message != null) {
