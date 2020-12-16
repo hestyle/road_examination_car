@@ -79,6 +79,8 @@ public class MainGui extends JFrame {
             if(server != null){
                 serverSocketHandler = new ServerSocketHandler(this.server, this);
                 serverSocketHandler.start();
+                // 弹窗提示
+                JOptionPane.showMessageDialog(this, "已成功启动TCP服务！");
                 // disable启动tcp服务的按钮,enable停止tcp服务的按钮
                 this.startTcpButton.setEnabled(false);
                 this.stopTcpButton.setEnabled(true);
@@ -272,8 +274,6 @@ public class MainGui extends JFrame {
                     TcpRequestMessage res = (TcpRequestMessage) ois.readObject();
                     System.err.println(res.toString());
                     if (res.getTypeName().equals("true")) {
-                        // 弹窗提示
-                        JOptionPane.showMessageDialog(currentFrame, "已成功启动TCP服务！");
                         currentFrame.setVisible(false);
                         CarGui.launch(serverSocket, socket, ois, oos);
                         break;
