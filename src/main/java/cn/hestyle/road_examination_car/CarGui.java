@@ -1536,7 +1536,7 @@ public class CarGui extends JFrame implements WindowListener {
                         }
                     }
                     Double tempL = 0D;
-                    tempL = oldSpeed * 1000D / 3600 * (t * 150D / 1000) +
+                    tempL = oldSpeed / 3.6 * (t * 150D / 1000) +
                             1D/2 * (0.5D/(150D/1000) * 1000D / 3600) * (t * 150D / 1000) * (t * 150D / 1000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
@@ -1590,7 +1590,7 @@ public class CarGui extends JFrame implements WindowListener {
 
                     List<String> temp = new LinkedList<>();
                     Double tempL = 0D;
-                    tempL = oldSpeed * 1000D / 3600 * (t* 100D / 1000) -
+                    tempL = oldSpeed / 3.6 * (t* 100D / 1000) -
                             1D/2 * (0.5D/(100D/1000) * 1000D / 3600) * (t * 100D / 1000) * (t * 100D / 1000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
@@ -1643,7 +1643,7 @@ public class CarGui extends JFrame implements WindowListener {
                     Double tempL = 0D;
                     System.err.println("oldSpeed:"+oldSpeed);
                     System.err.println("t:"+t);
-                    tempL = oldSpeed * 1000 / 3600 * (t * 60D / 1000) -
+                    tempL = oldSpeed /3.6 * (t * 60D / 1000) -
                             1D/2 * (0.5D/(60D/1000) * 1000D / 3600) * (t * 60D / 1000) * (t * 60 / 1000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
