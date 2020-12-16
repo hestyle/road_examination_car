@@ -40,7 +40,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_clutchPedalOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_ON_CLUTCH_PEDAL");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_clutchPedalOn.setEnabled(false);
             radioButton_clutchPedalOff.setEnabled(true);
@@ -52,7 +52,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_clutchPedalOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_OFF_CLUTCH_PEDAL");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_clutchPedalOn.setEnabled(true);
             radioButton_clutchPedalOff.setEnabled(false);
@@ -65,7 +65,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_brakePedalOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_ON_BRAKE_PEDAL");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             if (radioButton_acceleratorPedalOff.isEnabled()) { // 踩了加速踏板 松开加速踏板
                 radioButton_acceleratorPedalOn.setEnabled(true);
@@ -85,7 +85,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_brakePedalOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_OFF_BRAKE_PEDAL");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_brakePedalOn.setEnabled(true);
             radioButton_brakePedalOff.setEnabled(false);
@@ -98,7 +98,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_acceleratorPedalOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("LIGHT_STEP_ON_ACCELERATOR_PEDAL");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             if (radioButton_brakePedalOff.isEnabled()) { // 踩了刹车踏板 松开刹车踏板
                 radioButton_brakePedalOn.setEnabled(true);
@@ -120,7 +120,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_acceleratorPedalOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_OFF_ACCELERATOR_PEDAL");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_acceleratorPedalOn.setEnabled(true);
             radioButton_acceleratorPedalOff.setEnabled(false);
@@ -139,7 +139,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_lightDippedOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_ON_DIPPED_LIGHT");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_lightDippedOn.setEnabled(false);
             radioButton_lightHighDippedClose.setEnabled(true);
@@ -154,7 +154,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_lightHighOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_ON_HIGH_LIGHT");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_lightHighOn.setEnabled(false);
             radioButton_lightHighDippedClose.setEnabled(true);
@@ -169,7 +169,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_lightHighDippedOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_ON_HIGH_DIPPED_LIGHT");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_lightHighDippedOn.setEnabled(false);
             radioButton_lightHighDippedClose.setEnabled(true);
@@ -184,7 +184,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_lightHighDippedClose.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_OFF_ALL_LIGHT");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             buttonGroup_highDipped.clearSelection();
             radioButton_lightHighDippedClose.setEnabled(false);
@@ -200,7 +200,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_lightTurnLeftSignalOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_ON_LEFT_TURN_SIGNAL");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_lightTurnLeftSignalOn.setEnabled(false);
             radioButton_lightTurnSignalOff.setEnabled(true);
@@ -214,7 +214,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_lightTurnRightSignalOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_ON_RIHGT_TURN_SIGNAL");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_lightTurnRightSignalOn.setEnabled(false);
             radioButton_lightTurnSignalOff.setEnabled(true);
@@ -228,7 +228,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_lightTurnSignalOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_OFF_ALL_LIGHT");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_lightTurnSignalOff.setEnabled(false);
             radioButton_lightTurnRightSignalOn.setEnabled(true);
@@ -243,11 +243,11 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_lightFogOn.isSelected()) {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_ON_FOG_LIGHT");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
         } else {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_OFF_ALL_LIGHT");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
         }
     }
 
@@ -257,11 +257,11 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_lightOutLineMarkOn.isSelected()) {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_ON_OUTLINE_MARK_LIGHT");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
         } else {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_OFF_ALL_LIGHT");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
         }
     }
 
@@ -271,11 +271,11 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_lightHazardWarnOn.isSelected()) {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_ON_HAZARD_WARN_LIGHT");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
         } else {
             List<String> temp = new LinkedList<>();
             temp.add("TURN_OFF_ALL_LIGHT");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
         }
     }
 
@@ -293,7 +293,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_safetyBeltOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("绑安全带");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             radioButton_safetyBeltOn.setEnabled(false);
             radioButton_safetyBeltOff.setEnabled(true);
@@ -306,7 +306,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_safetyBeltOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("解安全带");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             radioButton_safetyBeltOn.setEnabled(true);
             radioButton_safetyBeltOff.setEnabled(false);
@@ -319,7 +319,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_doorClose.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("关闭车门");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             radioButton_doorClose.setEnabled(false);
             radioButton_doorOpen.setEnabled(true);
@@ -332,7 +332,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_doorOpen.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("打开车门");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             radioButton_doorClose.setEnabled(true);
             radioButton_doorOpen.setEnabled(false);
@@ -345,7 +345,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_parkBrakeOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("PULL_UP_PARK_BRAKE");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_parkBrakeOn.setEnabled(false);
             radioButton_parkBrakeOff.setEnabled(true);
@@ -361,7 +361,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_parkBrakeOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("PULL_DOWN_PARK_BRAKE");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_parkBrakeOn.setEnabled(true);
             radioButton_parkBrakeOff.setEnabled(false);
@@ -372,28 +372,28 @@ public class CarGui extends JFrame implements WindowListener {
         // TODO add your code here
         List<String> temp = new LinkedList<>();
         temp.add("STEER_WHEEL_MODERATE_TURN_LEFT");
-        sendMessage(temp);
+        sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
     }
 
     private void button_steerWheelSlightTurnLeftMouseClicked(MouseEvent e) {
         // TODO add your code here
         List<String> temp = new LinkedList<>();
         temp.add("STEER_WHEEL_SLIGHT_TURN_LEFT");
-        sendMessage(temp);
+        sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
     }
 
     private void button_steerWheelSlightTurnRightMouseClicked(MouseEvent e) {
         // TODO add your code here
         List<String> temp = new LinkedList<>();
         temp.add("STEER_WHEEL_SLIGHT_TURN_RIGHT");
-        sendMessage(temp);
+        sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
     }
 
     private void button_steerWheelModerateTurnRightMouseClicked(MouseEvent e) {
         // TODO add your code here
         List<String> temp = new LinkedList<>();
         temp.add("STEER_WHEEL_MODERATE_TURN_RIGHT");
-        sendMessage(temp);
+        sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
     }
 
     private void radioButton_obeserveReverseMirrorMouseClicked(MouseEvent e) {
@@ -401,7 +401,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_obeserveReverseMirror.isSelected()) {
             List<String> temp = new LinkedList<>();
             temp.add("OBSERVE_REARVIEW_MIRROR");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_obeserveReverseMirror.setSelected(false);
         }
@@ -414,7 +414,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_gearNeutral.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             nextGear = 0;
             nextGearButton = radioButton_gearNeutral;
@@ -433,7 +433,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_gearForward.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("SET_FORWARD_GEAR");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             nextGear = 1;
             nextGearButton = radioButton_gearForward;
@@ -452,7 +452,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_gearSecond.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("SET_SECOND_GEAR");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             nextGear = 2;
             nextGearButton = radioButton_gearSecond;
@@ -471,7 +471,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_gearThird.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("SET_THIRD_GEAR");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             nextGear = 3;
             nextGearButton = radioButton_gearThird;
@@ -490,7 +490,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_gearFourth.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("SET_FOURTH_GEAR");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             nextGear = 4;
             nextGearButton = radioButton_gearFourth;
@@ -509,7 +509,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_gearFifth.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("SET_FIFTH_GEAR");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             nextGear = 5;
             nextGearButton = radioButton_gearFifth;
@@ -528,7 +528,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_gearReverse.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("SET_REVERSE_GEAR");
-            sendMessage(temp);
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             nextGear = -1;
             nextGearButton = radioButton_gearReverse;
@@ -1547,7 +1547,7 @@ public class CarGui extends JFrame implements WindowListener {
                     System.out.println("松开加速踏板");
                     List<String> temp = new LinkedList<>();
                     temp.add("SPEED:" + String.format("%.2f", speed));
-                    sendMessage(temp);
+                    sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1588,14 +1588,15 @@ public class CarGui extends JFrame implements WindowListener {
                     }
                     System.out.println("松开刹车踏板");
 
-                    List<String> temp = new LinkedList<>();
                     Double tempL = 0D;
                     tempL = oldSpeed / 3.6 * (t* 100D / 1000) -
                             1D/2 * (0.5D/(100D/1000) * 1000D / 3600) * (t * 100D / 1000) * (t * 100D / 1000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
                     odometer.wait = false;
-                    sendMessage(temp);
+                    List<String> temp = new LinkedList<>();
+                    temp.add("SPEED:" + String.format("%.2f", speed));
+                    sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1640,6 +1641,7 @@ public class CarGui extends JFrame implements WindowListener {
                     }
                     List<String> temp = new LinkedList<>();
                     temp.add("SPEED:" + String.format("%.2f", speed));
+                    sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
                     Double tempL = 0D;
                     System.err.println("oldSpeed:"+oldSpeed);
                     System.err.println("t:"+t);
@@ -1649,7 +1651,6 @@ public class CarGui extends JFrame implements WindowListener {
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
                     odometer.setSpeed(speed);
                     odometer.wait = false;
-                    sendMessage(temp);
 
                     busy = false;
                     synchronized (this) {
@@ -1732,9 +1733,9 @@ public class CarGui extends JFrame implements WindowListener {
         }
     }
 
-    private void sendMessage(List<String> examItemOperationNameList){
+    private void sendMessage(List<String> examItemOperationNameList, String typeName){
         tcpResponseMessage= new TcpResponseMessage();
-//        tcpResponseMessage.setTypeName(TcpResponseMessage.RESPONSE_CHECK_IP_AND_MAC);
+        tcpResponseMessage.setTypeName(typeName);
         tcpResponseMessage.setExamItemOperationName(examItemOperationNameList);
 
         messageTaskQueue.putMessage(tcpResponseMessage);
