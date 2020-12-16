@@ -8,6 +8,35 @@ new FormModel {
 		} ) {
 			name: "this"
 			"title": "车辆状态模拟"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label3"
+				"text": "里程："
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 185
+				"y": 22
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "mileageLabel"
+				"text": "0"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"width": 40
+				"x": 240
+				"y": 22
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "km/h"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 445
+				"y": 22
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label5"
+				"text": "m"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 290
+				"y": 22
+			} )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) {
 				"autoSize": false
 			} ) {
@@ -177,7 +206,7 @@ new FormModel {
 						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_clutchPedalOnMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 10
-						"y": 40
+						"y": 45
 					} )
 					add( new FormComponent( "javax.swing.JRadioButton" ) {
 						name: "radioButton_clutchPedalOff"
@@ -189,7 +218,7 @@ new FormModel {
 					} )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 10
-					"y": 35
+					"y": 40
 					"width": 95
 					"height": 100
 				} )
@@ -203,7 +232,7 @@ new FormModel {
 						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_brakePedalOnMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 10
-						"y": 40
+						"y": 45
 					} )
 					add( new FormComponent( "javax.swing.JRadioButton" ) {
 						name: "radioButton_brakePedalOff"
@@ -217,7 +246,7 @@ new FormModel {
 					"width": 95
 					"height": 100
 					"x": 110
-					"y": 35
+					"y": 40
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class com.jformdesigner.runtime.NullLayout ) {
 					"autoSize": false
@@ -229,7 +258,7 @@ new FormModel {
 						addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_acceleratorPedalOnMouseClicked", true ) )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 						"x": 10
-						"y": 40
+						"y": 45
 					} )
 					add( new FormComponent( "javax.swing.JRadioButton" ) {
 						name: "radioButton_acceleratorPedalOff"
@@ -243,11 +272,11 @@ new FormModel {
 					"width": 95
 					"height": 100
 					"x": 210
-					"y": 35
+					"y": 40
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 5
-				"y": 20
+				"y": 15
 				"width": 310
 				"height": 140
 			} )
@@ -396,13 +425,6 @@ new FormModel {
 				"y": 355
 				"height": 75
 				"width": 145
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label2"
-				"text": "km/h"
-			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 445
-				"y": 22
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 90 )
