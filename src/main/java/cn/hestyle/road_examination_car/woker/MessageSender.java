@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class MessageHandler extends Thread{
+public class MessageSender extends Thread{
     private static int count = 0;
     private boolean busy = false;
     private boolean stop = false;
@@ -16,7 +16,7 @@ public class MessageHandler extends Thread{
 
     private ObjectOutputStream oos;
 
-    public MessageHandler(MessageTaskQueue messageTaskQueue, ObjectOutputStream oos){
+    public MessageSender(MessageTaskQueue messageTaskQueue, ObjectOutputStream oos){
         this.messageTaskQueue = messageTaskQueue;
         this.oos = oos;
     }

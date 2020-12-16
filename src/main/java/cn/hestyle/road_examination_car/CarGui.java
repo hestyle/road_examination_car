@@ -8,11 +8,11 @@ import cn.hestyle.road_examination_car.entity.Car;
 import cn.hestyle.road_examination_car.entity.MessageTaskQueue;
 import cn.hestyle.tcp.TcpRequestMessage;
 import cn.hestyle.tcp.TcpResponseMessage;
-import cn.hestyle.road_examination_car.woker.MessageHandler;
+import cn.hestyle.road_examination_car.woker.MessageSender;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -24,7 +24,7 @@ import javax.swing.*;
 /**
  * @author hestyle
  */
-public class CarGui extends JFrame {
+public class CarGui extends JFrame implements WindowListener {
     public CarGui(ServerSocket serverSocket, Socket socket, ObjectOutputStream oos, ObjectInputStream ois) {
         this.oos = oos;
         this.ois = ois;
@@ -1258,11 +1258,14 @@ public class CarGui extends JFrame {
         parkBrakeActionHandler.start();
         tcpResponseMessage= new TcpResponseMessage();
 
-        SocketCloseListerner socketCloseListerner = new SocketCloseListerner(serverSocket, socket, oos, ois, this);
-        socketCloseListerner.start();
+        messageListener = new MessageListener(serverSocket, socket, oos, ois, this);
+        messageListener.start();
 
-        MessageHandler messageHandler = new MessageHandler(messageTaskQueue, oos);
-        messageHandler.start();
+        messageSender = new MessageSender(messageTaskQueue, oos);
+        messageSender.start();
+
+        this.addWindowListener(this);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
@@ -1341,6 +1344,9 @@ public class CarGui extends JFrame {
     private ObjectInputStream ois;
     private Socket socket;
     private ServerSocket serverSocket;
+
+    private MessageListener messageListener;
+    private MessageSender messageSender;
 
 
     private Car car;
@@ -1595,13 +1601,13 @@ public class CarGui extends JFrame {
     }
 
     // 考试结束处理
-    class SocketCloseListerner extends Thread{
+    class MessageListener extends Thread{
         ObjectInputStream ois;
         ObjectOutputStream oos;
         Socket socket;
         ServerSocket serverSocket;
-        Frame currentFrame;
-        public SocketCloseListerner(ServerSocket serverSocket, Socket socket, ObjectOutputStream oos, ObjectInputStream ois, JFrame currentFrame){
+        JFrame currentFrame;
+        public MessageListener(ServerSocket serverSocket, Socket socket, ObjectOutputStream oos, ObjectInputStream ois, JFrame currentFrame){
             this.ois = ois;
             this.oos = oos;
             this.socket = socket;
@@ -1615,18 +1621,18 @@ public class CarGui extends JFrame {
                     TcpRequestMessage tcpRequestMessage = (TcpRequestMessage) ois.readObject();
 
                     if(tcpRequestMessage.getTypeName().equals(TcpRequestMessage.REQUEST_TCP_CONNECT_CLOSE)){
+
                         oos.close();
                         ois.close();
                         socket.close();
                         serverSocket.close();
                         currentFrame.dispose();
-                        MainGui.launch();
+                        MainGui.launch(true);
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println("读考试端发送的数据失败");
-                this.interrupt();
             }
         }
     }
@@ -1637,6 +1643,56 @@ public class CarGui extends JFrame {
         tcpResponseMessage.setExamItemOperationName(examItemOperationNameList);
 
         messageTaskQueue.putMessage(tcpResponseMessage);
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        try {
+            this.messageListener.stop();
+            this.messageSender.stop();
+            if( this.ois != null)
+                this.ois.close();
+            if(this.oos != null)
+                this.oos.close();
+            if(this.socket != null)
+                this.socket.close();
+            if(this.serverSocket != null)
+                this.serverSocket.close();
+            this.dispose();
+            MainGui.launch(true);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
     }
 
     public static void main(String[] args) {

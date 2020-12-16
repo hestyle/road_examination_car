@@ -35,8 +35,11 @@ public class MainGui extends JFrame {
 
     private ServerSocket server;
 
-    public MainGui() {
+    public MainGui(Boolean startService) {
         initComponents();
+        if(startService){
+            startTcpButton.doClick();
+        }
     }
 
     /**
@@ -213,10 +216,10 @@ public class MainGui extends JFrame {
     private JButton stopTcpButton;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
-    public static void launch() {
+    public static void launch(Boolean startService) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainGui().setVisible(true);
+                new MainGui(startService).setVisible(true);
             }
         });
     }
@@ -286,7 +289,7 @@ public class MainGui extends JFrame {
 
     public static void main(String[] args) {
         // 打开主界面
-        MainGui mainGui = new MainGui();
+        MainGui mainGui = new MainGui(false);
         mainGui.setVisible(true);
     }
 }
