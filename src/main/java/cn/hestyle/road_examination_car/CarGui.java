@@ -625,7 +625,7 @@ public class CarGui extends JFrame implements WindowListener {
         label2.setBounds(new Rectangle(new Point(445, 22), label2.getPreferredSize()));
 
         //---- label5 ----
-        label5.setText("m");
+        label5.setText("km");
         contentPane.add(label5);
         label5.setBounds(new Rectangle(new Point(290, 22), label5.getPreferredSize()));
 
@@ -1544,8 +1544,8 @@ public class CarGui extends JFrame implements WindowListener {
                         }
                     }
                     Double tempL = 0D;
-                    tempL = oldSpeed / 3.6 * (t * 150D / 1000) +
-                            1D/2 * (0.5D/(150D/1000) * 1000D / 3600) * (t * 150D / 1000) * (t * 150D / 1000);
+                    tempL = oldSpeed  * (t * 150D / 3600000) +
+                            1D/2 * (0.5D) * (t * 150D / 3600000) * (t * 150D / 3600000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
                     odometer.setSpeed(speed);
@@ -1597,8 +1597,8 @@ public class CarGui extends JFrame implements WindowListener {
                     System.out.println("松开刹车踏板");
 
                     Double tempL = 0D;
-                    tempL = oldSpeed / 3.6 * (t* 100D / 1000) -
-                            1D/2 * (0.5D/(100D/1000) * 1000D / 3600) * (t * 100D / 1000) * (t * 100D / 1000);
+                    tempL = oldSpeed  * (t * 100D / 3600000) -
+                            1D/2 * (0.5D) * (t * 100D / 3600000) * (t * 100D / 3600000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
                     odometer.wait = false;
@@ -1653,8 +1653,8 @@ public class CarGui extends JFrame implements WindowListener {
                     Double tempL = 0D;
                     System.err.println("oldSpeed:"+oldSpeed);
                     System.err.println("t:"+t);
-                    tempL = oldSpeed /3.6 * (t * 60D / 1000) -
-                            1D/2 * (0.5D/(60D/1000) * 1000D / 3600) * (t * 60D / 1000) * (t * 60 / 1000);
+                    tempL = oldSpeed  * (t * 60D / 3600000) -
+                            1D/2 * (0.5D) * (t * 60D / 3600000) * (t * 60 / 3600000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
                     odometer.setSpeed(speed);
@@ -1730,7 +1730,7 @@ public class CarGui extends JFrame implements WindowListener {
                     while (!wait){
                         sleep(1000);
                         Double lastL = Double.valueOf(mileageLabel.getText());
-                        lastL = lastL + speed * 1000 / 3600 * 1;
+                        lastL = lastL + speed * 1D / 3600;
 
                         mileageLabel.setText(String.format("%.2f", lastL));
                     }
