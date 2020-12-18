@@ -1564,9 +1564,9 @@ public class CarGui extends JFrame implements WindowListener {
 
 //                  messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("松开加速踏板"));
                     System.out.println("松开加速踏板");
-                    List<String> temp = new LinkedList<>();
-                    temp.add("SPEED:" + String.format("%.2f", speed));
-                    sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
+                    Map<String, String> map = new HashMap<>();
+                    map.put("SPEED", String.valueOf(speed));
+                    sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1620,9 +1620,9 @@ public class CarGui extends JFrame implements WindowListener {
                     Double lastL = Double.valueOf(mileageLabel.getText());
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
                     odometer.wait = false;
-                    List<String> temp = new LinkedList<>();
-                    temp.add("SPEED:" + String.format("%.2f", speed));
-                    sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
+                    Map<String, String> map = new HashMap<>();
+                    map.put("SPEED", String.valueOf(speed));
+                    sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1672,9 +1672,9 @@ public class CarGui extends JFrame implements WindowListener {
                             acceleratorActionHandler.notify();
                         }
                     }
-                    List<String> temp = new LinkedList<>();
-                    temp.add("SPEED:" + String.format("%.2f", speed));
-                    sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
+                    Map<String, String> map = new HashMap<>();
+                    map.put("SPEED", String.valueOf(speed));
+                    sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
                     Double tempL = 0D;
                     tempL = oldSpeed * (t * 60D / 3600000) -
                             1D / 2 * (0.5D) * (t * 60D / 3600000) * (t * 60 / 3600000);
