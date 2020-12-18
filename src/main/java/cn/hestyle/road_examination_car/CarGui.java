@@ -54,7 +54,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_clutchPedalOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_OFF_CLUTCH_PEDAL");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
 
             radioButton_clutchPedalOn.setEnabled(true);
             radioButton_clutchPedalOff.setEnabled(false);
@@ -67,6 +67,9 @@ public class CarGui extends JFrame implements WindowListener {
                     odometer.wait = false;
                 }
             }
+            Map<String, String> map = new HashMap<>();
+            map.put("SPEED", "10");
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
         }
     }
 
@@ -450,7 +453,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -467,7 +470,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -484,7 +487,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -501,7 +504,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -519,7 +522,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -537,7 +540,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -555,7 +558,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -1601,6 +1604,9 @@ public class CarGui extends JFrame implements WindowListener {
                             if(speed <= 0){
                                 odometer.setSpeed(0D);
                                 odometer.wait = true;
+                                Map<String, String> map = new HashMap<>();
+                                map.put("SPEED", "0");
+                                sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
                             }
                         }
                         speedLabel.setText(String.format("%.2f", speed));
@@ -1651,6 +1657,9 @@ public class CarGui extends JFrame implements WindowListener {
                             if(speed <= 0){
                                 odometer.setSpeed(0D);
                                 odometer.wait = true;
+                                Map<String, String> map = new HashMap<>();
+                                map.put("SPEED", "0");
+                                sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
                             }
                         }
                         speedLabel.setText(String.format("%.2f", speed));
@@ -1667,8 +1676,6 @@ public class CarGui extends JFrame implements WindowListener {
                     temp.add("SPEED:" + String.format("%.2f", speed));
                     sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
                     Double tempL = 0D;
-                    System.err.println("oldSpeed:" + oldSpeed);
-                    System.err.println("t:" + t);
                     tempL = oldSpeed * (t * 60D / 3600000) -
                             1D / 2 * (0.5D) * (t * 60D / 3600000) * (t * 60 / 3600000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
@@ -1832,6 +1839,13 @@ public class CarGui extends JFrame implements WindowListener {
         tcpResponseMessage.setTypeName(typeName);
         tcpResponseMessage.setDataMap(map);
         tcpResponseMessage.setExamItemOperationName(examItemOperationNameList);
+
+        messageTaskQueue.putMessage(tcpResponseMessage);
+    }
+    private void sendMessage(Map<String, String> map, String typeName) {
+        tcpResponseMessage = new TcpResponseMessage();
+        tcpResponseMessage.setTypeName(typeName);
+        tcpResponseMessage.setDataMap(map);
 
         messageTaskQueue.putMessage(tcpResponseMessage);
     }
