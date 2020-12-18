@@ -43,6 +43,7 @@ public class MessageSender extends Thread{
                         oos.writeObject(message);
                         oos.flush();
                     } catch (IOException e) {
+                        e.printStackTrace();
                         System.err.println("发送数据给考试端失败");
                     }
                 }else {

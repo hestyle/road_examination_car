@@ -63,7 +63,7 @@ public class CarGui extends JFrame implements WindowListener {
     private void radioButton_brakePedalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_brakePedalOn.isEnabled()) {
-            if(radioButton_acceleratorPedalOff.isEnabled()){
+            if (radioButton_acceleratorPedalOff.isEnabled()) {
                 List<String> temp = new LinkedList<>();
                 temp.add("STEP_OFF_ACCELERATOR_PEDAL");
                 sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
@@ -218,7 +218,7 @@ public class CarGui extends JFrame implements WindowListener {
                 @Override
                 public void run() {
                     try {
-                        synchronized (this){
+                        synchronized (this) {
                             this.wait(1000 * 5);
                         }
                         radioButton_lightTurnLeftSignalOn.setEnabled(true);
@@ -250,7 +250,7 @@ public class CarGui extends JFrame implements WindowListener {
                 @Override
                 public void run() {
                     try {
-                        synchronized (this){
+                        synchronized (this) {
                             this.wait(1000 * 5);
                         }
                         radioButton_lightTurnLeftSignalOn.setEnabled(true);
@@ -456,18 +456,14 @@ public class CarGui extends JFrame implements WindowListener {
         // TODO add your code here
         // 踩离合状态 radioButton_clutchPedalOn.isEnabled() == false
         if (radioButton_gearNeutral.isEnabled()) {
+            nextGear = 0;
+            nextGearButton = radioButton_gearNeutral;
+
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
             sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
-            nextGear = 0;
-            nextGearButton = radioButton_gearNeutral;
-            synchronized (gearActionHandler) {
-                gearActionHandler.notify();
-            }
-
-            while (gearActionHandler.isBusy()) {
-            }
+            checkGearShift();
         }
     }
 
@@ -475,18 +471,14 @@ public class CarGui extends JFrame implements WindowListener {
     private void radioButton_gearForwardMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearForward.isEnabled()) {
-            List<String> temp = new LinkedList<>();
-            temp.add("SET_FORWARD_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
-
             nextGear = 1;
             nextGearButton = radioButton_gearForward;
-            synchronized (gearActionHandler) {
-                gearActionHandler.notify();
-            }
 
-            while (gearActionHandler.isBusy()) {
-            }
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
+            checkGearShift();
         }
     }
 
@@ -494,18 +486,14 @@ public class CarGui extends JFrame implements WindowListener {
     private void radioButton_gearSecondMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearSecond.isEnabled()) {
-            List<String> temp = new LinkedList<>();
-            temp.add("SET_SECOND_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
-
             nextGear = 2;
             nextGearButton = radioButton_gearSecond;
-            synchronized (gearActionHandler) {
-                gearActionHandler.notify();
-            }
 
-            while (gearActionHandler.isBusy()) {
-            }
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
+            checkGearShift();
         }
     }
 
@@ -513,18 +501,14 @@ public class CarGui extends JFrame implements WindowListener {
     private void radioButton_gearThirdMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearThird.isEnabled()) {
-            List<String> temp = new LinkedList<>();
-            temp.add("SET_THIRD_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
-
             nextGear = 3;
             nextGearButton = radioButton_gearThird;
-            synchronized (gearActionHandler) {
-                gearActionHandler.notify();
-            }
 
-            while (gearActionHandler.isBusy()) {
-            }
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
+            checkGearShift();
         }
     }
 
@@ -532,18 +516,15 @@ public class CarGui extends JFrame implements WindowListener {
     private void radioButton_gearFourthMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearFourth.isEnabled()) {
-            List<String> temp = new LinkedList<>();
-            temp.add("SET_FOURTH_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
-
             nextGear = 4;
             nextGearButton = radioButton_gearFourth;
-            synchronized (gearActionHandler) {
-                gearActionHandler.notify();
-            }
 
-            while (gearActionHandler.isBusy()) {
-            }
+
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
+            checkGearShift();
         }
     }
 
@@ -551,18 +532,15 @@ public class CarGui extends JFrame implements WindowListener {
     private void radioButton_gearFifthMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearFifth.isEnabled()) {
-            List<String> temp = new LinkedList<>();
-            temp.add("SET_FIFTH_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
-
             nextGear = 5;
             nextGearButton = radioButton_gearFifth;
-            synchronized (gearActionHandler) {
-                gearActionHandler.notify();
-            }
 
-            while (gearActionHandler.isBusy()) {
-            }
+
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
+            checkGearShift();
         }
     }
 
@@ -570,18 +548,15 @@ public class CarGui extends JFrame implements WindowListener {
     private void radioButton_gearReverseMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_gearReverse.isEnabled()) {
-            List<String> temp = new LinkedList<>();
-            temp.add("SET_REVERSE_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
-
             nextGear = -1;
             nextGearButton = radioButton_gearReverse;
-            synchronized (gearActionHandler) {
-                gearActionHandler.notify();
-            }
 
-            while (gearActionHandler.isBusy()) {
-            }
+
+            List<String> temp = new LinkedList<>();
+            temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
+            checkGearShift();
         }
     }
 
@@ -857,7 +832,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < gearPanel.getComponentCount(); i++) {
+                for (int i = 0; i < gearPanel.getComponentCount(); i++) {
                     Rectangle bounds = gearPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -994,7 +969,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < parkBrakePanel.getComponentCount(); i++) {
+                for (int i = 0; i < parkBrakePanel.getComponentCount(); i++) {
                     Rectangle bounds = parkBrakePanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1026,7 +1001,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < otherPanel.getComponentCount(); i++) {
+                for (int i = 0; i < otherPanel.getComponentCount(); i++) {
                     Rectangle bounds = otherPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1101,7 +1076,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < steerWheelPanel.getComponentCount(); i++) {
+                for (int i = 0; i < steerWheelPanel.getComponentCount(); i++) {
                     Rectangle bounds = steerWheelPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1144,7 +1119,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < safetyBeltPanel.getComponentCount(); i++) {
+                for (int i = 0; i < safetyBeltPanel.getComponentCount(); i++) {
                     Rectangle bounds = safetyBeltPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1187,7 +1162,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for(int i = 0; i < doorPanel.getComponentCount(); i++) {
+                for (int i = 0; i < doorPanel.getComponentCount(); i++) {
                     Rectangle bounds = doorPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1308,13 +1283,13 @@ public class CarGui extends JFrame implements WindowListener {
 
         car = Car.getInstance();
 
-        gearActionHandler.start();
+//        gearActionHandler.start();
         acceleratorActionHandler.start();
         brakeActionHandler.start();
         parkBrakeActionHandler.start();
-        tcpResponseMessage= new TcpResponseMessage();
+        tcpResponseMessage = new TcpResponseMessage();
 
-        if(serverSocket != null){
+        if (serverSocket != null) {
             messageListener = new MessageListener(serverSocket, socket, oos, ois, this);
             messageListener.start();
         }
@@ -1326,7 +1301,7 @@ public class CarGui extends JFrame implements WindowListener {
         odometer.setSpeed(0D);
         odometer.start();
 
-        if(serverSocket != null){
+        if (serverSocket != null) {
             this.addWindowListener(this);
             this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         }
@@ -1447,9 +1422,9 @@ public class CarGui extends JFrame implements WindowListener {
                     // 进行判断
                     if (radioButton_clutchPedalOff.isEnabled()) { //踩了离合
                         if ((lastGear == -1 && nextGear == 1) || nextGear == -1 || nextGear == 0 || Math.abs(lastGear - nextGear) == 1) { // 可以挂挡
-                            nextGearButton.setEnabled(false);
-                            lastGearButton.setEnabled(true);
-                            buttonGroup_gear.clearSelection();
+//                            nextGearButton.setEnabled(false);
+//                            lastGearButton.setEnabled(true);
+//                            buttonGroup_gear.clearSelection();
 
                             lastGear = nextGear;
                             lastGearButton = nextGearButton;
@@ -1545,7 +1520,7 @@ public class CarGui extends JFrame implements WindowListener {
                             speedLabel.setText(String.format("%.2f", speed));
                             sleep(150);
                             t++;
-                        } else if(radioButton_gearNeutral.isEnabled() == false && radioButton_parkBrakeOn.isEnabled() == false) { // 空挡，拉手刹
+                        } else if (radioButton_gearNeutral.isEnabled() == false && radioButton_parkBrakeOn.isEnabled() == false) { // 空挡，拉手刹
 //                                messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("空挡踩加速踏板"));
                             System.err.println("空挡 拉手刹 踩加速踏板");
                             busy = false;
@@ -1554,14 +1529,14 @@ public class CarGui extends JFrame implements WindowListener {
                             synchronized (this) {
                                 this.wait();
                             }
-                        } else if(radioButton_gearNeutral.isEnabled() == false && radioButton_parkBrakeOn.isEnabled()) {// 空挡，没拉手刹
+                        } else if (radioButton_gearNeutral.isEnabled() == false && radioButton_parkBrakeOn.isEnabled()) {// 空挡，没拉手刹
                             System.err.println("空挡 踩加速踏板");
                             busy = false;
                             waittingGear = true;
                             synchronized (this) {
                                 this.wait();
                             }
-                        } else if(radioButton_gearNeutral.isEnabled() && radioButton_parkBrakeOn.isEnabled() == false){ // 挂挡 拉手刹
+                        } else if (radioButton_gearNeutral.isEnabled() && radioButton_parkBrakeOn.isEnabled() == false) { // 挂挡 拉手刹
                             System.err.println("拉手刹 踩加速踏板");
                             busy = false;
                             waittingParkBrakeOff = true;
@@ -1571,8 +1546,8 @@ public class CarGui extends JFrame implements WindowListener {
                         }
                     }
                     Double tempL = 0D;
-                    tempL = oldSpeed  * (t * 150D / 3600000) +
-                            1D/2 * (0.5D) * (t * 150D / 3600000) * (t * 150D / 3600000);
+                    tempL = oldSpeed * (t * 150D / 3600000) +
+                            1D / 2 * (0.5D) * (t * 150D / 3600000) * (t * 150D / 3600000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
                     odometer.setSpeed(speed);
@@ -1624,8 +1599,8 @@ public class CarGui extends JFrame implements WindowListener {
                     System.out.println("松开刹车踏板");
 
                     Double tempL = 0D;
-                    tempL = oldSpeed  * (t * 100D / 3600000) -
-                            1D/2 * (0.5D) * (t * 100D / 3600000) * (t * 100D / 3600000);
+                    tempL = oldSpeed * (t * 100D / 3600000) -
+                            1D / 2 * (0.5D) * (t * 100D / 3600000) * (t * 100D / 3600000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
                     odometer.wait = false;
@@ -1678,10 +1653,10 @@ public class CarGui extends JFrame implements WindowListener {
                     temp.add("SPEED:" + String.format("%.2f", speed));
                     sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
                     Double tempL = 0D;
-                    System.err.println("oldSpeed:"+oldSpeed);
-                    System.err.println("t:"+t);
-                    tempL = oldSpeed  * (t * 60D / 3600000) -
-                            1D/2 * (0.5D) * (t * 60D / 3600000) * (t * 60 / 3600000);
+                    System.err.println("oldSpeed:" + oldSpeed);
+                    System.err.println("t:" + t);
+                    tempL = oldSpeed * (t * 60D / 3600000) -
+                            1D / 2 * (0.5D) * (t * 60D / 3600000) * (t * 60 / 3600000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
                     mileageLabel.setText(String.format("%.2f", tempL + lastL));
                     odometer.setSpeed(speed);
@@ -1702,13 +1677,14 @@ public class CarGui extends JFrame implements WindowListener {
     }
 
     // 接收消息线程
-    class MessageListener extends Thread{
+    class MessageListener extends Thread {
         ObjectInputStream ois;
         ObjectOutputStream oos;
         Socket socket;
         ServerSocket serverSocket;
         CarGui currentFrame;
-        public MessageListener(ServerSocket serverSocket, Socket socket, ObjectOutputStream oos, ObjectInputStream ois, CarGui currentFrame){
+
+        public MessageListener(ServerSocket serverSocket, Socket socket, ObjectOutputStream oos, ObjectInputStream ois, CarGui currentFrame) {
             this.ois = ois;
             this.oos = oos;
             this.socket = socket;
@@ -1716,12 +1692,12 @@ public class CarGui extends JFrame implements WindowListener {
             this.currentFrame = currentFrame;
         }
 
-        public void run(){
+        public void run() {
             try {
-                while (socket.isClosed() == false){
+                while (socket.isClosed() == false) {
                     TcpRequestMessage tcpRequestMessage = (TcpRequestMessage) ois.readObject();
 
-                    if(tcpRequestMessage.getTypeName().equals(TcpRequestMessage.REQUEST_TCP_CONNECT_CLOSE)){
+                    if (tcpRequestMessage.getTypeName().equals(TcpRequestMessage.REQUEST_TCP_CONNECT_CLOSE)) {
                         oos.close();
                         ois.close();
                         socket.close();
@@ -1747,15 +1723,18 @@ public class CarGui extends JFrame implements WindowListener {
 
     }
 
-    class Odometer extends Thread{
+    class Odometer extends Thread {
         volatile public Boolean wait = false;
         Double speed;
-        public void setSpeed(Double speed){this.speed=speed;}
 
-        public void run(){
+        public void setSpeed(Double speed) {
+            this.speed = speed;
+        }
+
+        public void run() {
             try {
-                while (true){
-                    while (!wait){
+                while (true) {
+                    while (!wait) {
                         sleep(1000);
                         Double lastL = Double.valueOf(mileageLabel.getText());
                         lastL = lastL + speed * 1D / 3600;
@@ -1763,19 +1742,74 @@ public class CarGui extends JFrame implements WindowListener {
                         mileageLabel.setText(String.format("%.2f", lastL));
                     }
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void sendMessage(List<String> examItemOperationNameList, String typeName){
-        tcpResponseMessage= new TcpResponseMessage();
+    private void sendMessage(List<String> examItemOperationNameList, String typeName) {
+        tcpResponseMessage = new TcpResponseMessage();
         tcpResponseMessage.setTypeName(typeName);
         tcpResponseMessage.setExamItemOperationName(examItemOperationNameList);
 
         messageTaskQueue.putMessage(tcpResponseMessage);
     }
+
+    private void checkGearShift(){
+        if (radioButton_clutchPedalOff.isEnabled()) { //踩了离合
+            if ((lastGear == -1 && nextGear == 1) || nextGear == -1 || nextGear == 0 || Math.abs(lastGear - nextGear) == 1) { // 可以挂挡
+                nextGearButton.setEnabled(false);
+                lastGearButton.setEnabled(true);
+                buttonGroup_gear.clearSelection();
+
+                lastGear = nextGear;
+                lastGearButton = nextGearButton;
+
+                // 唤醒加速处理线程
+                if (acceleratorActionHandler.isWaittingGear()) {
+                    synchronized (acceleratorActionHandler) {
+                        acceleratorActionHandler.notify();
+                    }
+                }
+
+                buttonGroup_gear.setSelected(nextGearButton.getModel(), true);
+                switch (nextGear) {
+                    case 0:
+//                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂空挡"));
+                        System.out.println("挂空挡");
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+//                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂"+nextGear+"挡"));
+                        System.out.println("挂" + nextGear + "挡");
+                        break;
+                    case -1:
+//                                    messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("挂倒挡"));
+                        System.out.println("挂倒挡");
+                        break;
+                }
+            } else {
+                buttonGroup_gear.clearSelection();
+                nextGearButton.setSelected(false);
+                buttonGroup_gear.setSelected(lastGearButton.getModel(), true);
+//                            messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("越级挂挡"));
+                System.err.println("越级挂挡");
+            }
+
+        } else { // 没踩离合
+            buttonGroup_gear.clearSelection();
+            nextGearButton.setSelected(false);
+            buttonGroup_gear.setSelected(lastGearButton.getModel(), true);
+//                        messageTaskQueue.putMessage(new SingleOperationMessageTask<String>("未踩离合挂挡"));
+            System.err.println("未踩离合挂挡");
+        }
+        // 结束判断
+    }
+
 
     @Override
     public void windowOpened(WindowEvent e) {
@@ -1787,9 +1821,9 @@ public class CarGui extends JFrame implements WindowListener {
         try {
             this.messageListener.stop();
             this.messageSender.stop();
-            if(this.socket != null && this.socket.isClosed() == false)
+            if (this.socket != null && this.socket.isClosed() == false)
                 this.socket.close();
-            if(this.serverSocket != null && this.serverSocket.isClosed() == false)
+            if (this.serverSocket != null && this.serverSocket.isClosed() == false)
                 this.serverSocket.close();
             this.dispose();
             MainGui.launch(true);
