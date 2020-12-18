@@ -1728,6 +1728,7 @@ public class CarGui extends JFrame implements WindowListener {
                         serverSocket.close();
                         currentFrame.dispose();
                         MainGui.launch(true);
+                        this.stop();
                     }
                 }
             } catch (Exception e) {
