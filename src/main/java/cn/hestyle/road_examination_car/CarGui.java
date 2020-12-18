@@ -1598,6 +1598,10 @@ public class CarGui extends JFrame implements WindowListener {
                         if (speed > 0) {
                             speed -= 0.5;
                             t++;
+                            if(speed <= 0){
+                                odometer.setSpeed(0D);
+                                odometer.wait = true;
+                            }
                         }
                         speedLabel.setText(String.format("%.2f", speed));
                         sleep(100);
@@ -1644,6 +1648,10 @@ public class CarGui extends JFrame implements WindowListener {
                         if (speed > 0) {
                             speed -= 0.5;
                             t++;
+                            if(speed <= 0){
+                                odometer.setSpeed(0D);
+                                odometer.wait = true;
+                            }
                         }
                         speedLabel.setText(String.format("%.2f", speed));
                         sleep(60);
