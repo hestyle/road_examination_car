@@ -212,6 +212,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_lightTurnLeftSignalOn.setEnabled(false);
             radioButton_lightTurnRightSignalOn.setEnabled(true);
+            label4.setText("(五秒后自动关闭)");
 
             Thread closeTurnSignalThread = new Thread(new Runnable() {
                 @Override
@@ -223,6 +224,7 @@ public class CarGui extends JFrame implements WindowListener {
                         radioButton_lightTurnLeftSignalOn.setEnabled(true);
                         radioButton_lightTurnRightSignalOn.setEnabled(true);
                         buttonGroup_turnSignal.clearSelection();
+                        label4.setText("");
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
@@ -242,6 +244,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_lightTurnRightSignalOn.setEnabled(false);
             radioButton_lightTurnLeftSignalOn.setEnabled(true);
+            label4.setText("(五秒后自动关闭)");
 
             Thread closeTurnSignalThread = new Thread(new Runnable() {
                 @Override
@@ -253,6 +256,7 @@ public class CarGui extends JFrame implements WindowListener {
                         radioButton_lightTurnLeftSignalOn.setEnabled(true);
                         radioButton_lightTurnRightSignalOn.setEnabled(true);
                         buttonGroup_turnSignal.clearSelection();
+                        label4.setText("");
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
@@ -764,11 +768,8 @@ public class CarGui extends JFrame implements WindowListener {
             });
             lightPanel.add(radioButton_lightHighDippedClose);
             radioButton_lightHighDippedClose.setBounds(new Rectangle(new Point(308, 70), radioButton_lightHighDippedClose.getPreferredSize()));
-
-            //---- label4 ----
-            label4.setText("(\u4e94\u79d2\u949f\u540e\u81ea\u52a8\u5173\u95ed)");
             lightPanel.add(label4);
-            label4.setBounds(new Rectangle(new Point(165, 20), label4.getPreferredSize()));
+            label4.setBounds(165, 20, 100, 25);
         }
         contentPane.add(lightPanel);
         lightPanel.setBounds(310, 55, 435, 100);
