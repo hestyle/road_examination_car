@@ -17,8 +17,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import javax.swing.*;
 
 /**
@@ -56,6 +58,15 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_clutchPedalOn.setEnabled(true);
             radioButton_clutchPedalOff.setEnabled(false);
+
+            if(lastGear == 1 || lastGear == -1){
+                Double speed = Double.valueOf(speedLabel.getText());
+                if(speed == 0D){
+                    speedLabel.setText("10");
+                    odometer.setSpeed(10D);
+                    odometer.wait = false;
+                }
+            }
         }
     }
 
@@ -206,31 +217,19 @@ public class CarGui extends JFrame implements WindowListener {
     private void radioButton_lightTurnLeftSignalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightTurnLeftSignalOn.isEnabled()) {
+            exitCloseTurnRightSignalThread = true;
+
             List<String> temp = new LinkedList<>();
             temp.add("TURN_ON_LEFT_TURN_SIGNAL");
             sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_lightTurnLeftSignalOn.setEnabled(false);
             radioButton_lightTurnRightSignalOn.setEnabled(true);
-            label4.setText("(五秒后自动关闭)");
+            label4.setText("(5秒后自动关闭)");
 
-            Thread closeTurnSignalThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        synchronized (this) {
-                            this.wait(1000 * 5);
-                        }
-                        radioButton_lightTurnLeftSignalOn.setEnabled(true);
-                        radioButton_lightTurnRightSignalOn.setEnabled(true);
-                        buttonGroup_turnSignal.clearSelection();
-                        label4.setText("");
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-            closeTurnSignalThread.start();
+            exitCloseTurnLeftSignalThread = false;
+            closeTurnLeftSignalThread = new CloseTurnLeftSignalThread();
+            closeTurnLeftSignalThread.start();
         }
     }
 
@@ -238,31 +237,19 @@ public class CarGui extends JFrame implements WindowListener {
     private void radioButton_lightTurnRightSignalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
         if (radioButton_lightTurnRightSignalOn.isEnabled()) {
+            exitCloseTurnLeftSignalThread = true;
+
             List<String> temp = new LinkedList<>();
             temp.add("TURN_ON_RIGHT_TURN_SIGNAL");
             sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_lightTurnRightSignalOn.setEnabled(false);
             radioButton_lightTurnLeftSignalOn.setEnabled(true);
-            label4.setText("(五秒后自动关闭)");
+            label4.setText("(5秒后自动关闭)");
 
-            Thread closeTurnSignalThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        synchronized (this) {
-                            this.wait(1000 * 5);
-                        }
-                        radioButton_lightTurnLeftSignalOn.setEnabled(true);
-                        radioButton_lightTurnRightSignalOn.setEnabled(true);
-                        buttonGroup_turnSignal.clearSelection();
-                        label4.setText("");
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-            closeTurnSignalThread.start();
+            exitCloseTurnRightSignalThread = false;
+            CloseTurnRightSignalThread closeTurnRightSignalThread = new CloseTurnRightSignalThread();
+            closeTurnRightSignalThread.start();
         }
     }
 
@@ -336,7 +323,7 @@ public class CarGui extends JFrame implements WindowListener {
         // TODO add your code here
         if (radioButton_safetyBeltOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
-            temp.add("绑安全带");
+            temp.add("FASTEN_SEAT_BELT");
             sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             radioButton_safetyBeltOn.setEnabled(false);
@@ -349,7 +336,7 @@ public class CarGui extends JFrame implements WindowListener {
         // TODO add your code here
         if (radioButton_safetyBeltOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
-            temp.add("解安全带");
+            temp.add("UNFASTEN_SEAT_BELT");
             sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             radioButton_safetyBeltOn.setEnabled(true);
@@ -362,7 +349,7 @@ public class CarGui extends JFrame implements WindowListener {
         // TODO add your code here
         if (radioButton_doorClose.isEnabled()) {
             List<String> temp = new LinkedList<>();
-            temp.add("关闭车门");
+            temp.add("CLOSE_DOOR");
             sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             radioButton_doorClose.setEnabled(false);
@@ -375,7 +362,7 @@ public class CarGui extends JFrame implements WindowListener {
         // TODO add your code here
         if (radioButton_doorOpen.isEnabled()) {
             List<String> temp = new LinkedList<>();
-            temp.add("打开车门");
+            temp.add("OPEN_DOOR");
             sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             radioButton_doorClose.setEnabled(true);
@@ -461,7 +448,9 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            Map<String, String> map = new HashMap<>();
+            map.put("SPEED",speedLabel.getText());
+            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -476,7 +465,9 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            Map<String, String> map = new HashMap<>();
+            map.put("SPEED",speedLabel.getText());
+            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -491,7 +482,9 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            Map<String, String> map = new HashMap<>();
+            map.put("SPEED",speedLabel.getText());
+            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -506,7 +499,9 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            Map<String, String> map = new HashMap<>();
+            map.put("SPEED",speedLabel.getText());
+            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -522,7 +517,9 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            Map<String, String> map = new HashMap<>();
+            map.put("SPEED",speedLabel.getText());
+            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -538,7 +535,9 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            Map<String, String> map = new HashMap<>();
+            map.put("SPEED",speedLabel.getText());
+            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -554,7 +553,9 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            Map<String, String> map = new HashMap<>();
+            map.put("SPEED",speedLabel.getText());
+            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -832,7 +833,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for (int i = 0; i < gearPanel.getComponentCount(); i++) {
+                for(int i = 0; i < gearPanel.getComponentCount(); i++) {
                     Rectangle bounds = gearPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -969,7 +970,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for (int i = 0; i < parkBrakePanel.getComponentCount(); i++) {
+                for(int i = 0; i < parkBrakePanel.getComponentCount(); i++) {
                     Rectangle bounds = parkBrakePanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1001,7 +1002,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for (int i = 0; i < otherPanel.getComponentCount(); i++) {
+                for(int i = 0; i < otherPanel.getComponentCount(); i++) {
                     Rectangle bounds = otherPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1076,7 +1077,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for (int i = 0; i < steerWheelPanel.getComponentCount(); i++) {
+                for(int i = 0; i < steerWheelPanel.getComponentCount(); i++) {
                     Rectangle bounds = steerWheelPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1096,7 +1097,7 @@ public class CarGui extends JFrame implements WindowListener {
             safetyBeltPanel.setLayout(null);
 
             //---- radioButton_safetyBeltOn ----
-            radioButton_safetyBeltOn.setText("\u7ed1\u5b89\u5168\u5e26");
+            radioButton_safetyBeltOn.setText("\u7cfb\u5b89\u5168\u5e26");
             radioButton_safetyBeltOn.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -1119,7 +1120,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for (int i = 0; i < safetyBeltPanel.getComponentCount(); i++) {
+                for(int i = 0; i < safetyBeltPanel.getComponentCount(); i++) {
                     Rectangle bounds = safetyBeltPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1162,7 +1163,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
-                for (int i = 0; i < doorPanel.getComponentCount(); i++) {
+                for(int i = 0; i < doorPanel.getComponentCount(); i++) {
                     Rectangle bounds = doorPanel.getComponent(i).getBounds();
                     preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
                     preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
@@ -1289,6 +1290,9 @@ public class CarGui extends JFrame implements WindowListener {
         parkBrakeActionHandler.start();
         tcpResponseMessage = new TcpResponseMessage();
 
+        closeTurnLeftSignalThread = null;
+        closeTurnRightSignalThread = null;
+
         if (serverSocket != null) {
             messageListener = new MessageListener(serverSocket, socket, oos, ois, this);
             messageListener.start();
@@ -1382,6 +1386,8 @@ public class CarGui extends JFrame implements WindowListener {
     private ParkBrakeActionHandler parkBrakeActionHandler = new ParkBrakeActionHandler();
     private TcpResponseMessage tcpResponseMessage;
     private Odometer odometer;
+    private CloseTurnLeftSignalThread closeTurnLeftSignalThread;
+    private CloseTurnRightSignalThread closeTurnRightSignalThread;
 
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
@@ -1592,6 +1598,10 @@ public class CarGui extends JFrame implements WindowListener {
                         if (speed > 0) {
                             speed -= 0.5;
                             t++;
+                            if(speed <= 0){
+                                odometer.setSpeed(0D);
+                                odometer.wait = true;
+                            }
                         }
                         speedLabel.setText(String.format("%.2f", speed));
                         sleep(100);
@@ -1638,6 +1648,10 @@ public class CarGui extends JFrame implements WindowListener {
                         if (speed > 0) {
                             speed -= 0.5;
                             t++;
+                            if(speed <= 0){
+                                odometer.setSpeed(0D);
+                                odometer.wait = true;
+                            }
                         }
                         speedLabel.setText(String.format("%.2f", speed));
                         sleep(60);
@@ -1674,6 +1688,59 @@ public class CarGui extends JFrame implements WindowListener {
             }
         }
 
+    }
+
+    //关闭左转灯线程
+    volatile private boolean exitCloseTurnLeftSignalThread = false;
+    class CloseTurnLeftSignalThread extends Thread{
+
+        public void run() {
+            try {
+                int i = 5;
+                while (i>0 && !exitCloseTurnLeftSignalThread){
+                    label4.setText("("+(i--)+"秒后自动关闭)");
+                    System.err.println("CloseTurnLeftSignalThread exit："+exitCloseTurnLeftSignalThread);
+                    synchronized (this) {
+                        this.wait(1000 * 1);
+                    }
+                }
+                if(exitCloseTurnLeftSignalThread){
+                   return;
+                }
+                radioButton_lightTurnLeftSignalOn.setEnabled(true);
+                radioButton_lightTurnRightSignalOn.setEnabled(true);
+                buttonGroup_turnSignal.clearSelection();
+                label4.setText("");
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    //关闭右转灯线程
+    volatile private boolean exitCloseTurnRightSignalThread = false;
+    class CloseTurnRightSignalThread extends Thread{
+        public void run() {
+            try {
+                int i = 5;
+                while (i>0 && !exitCloseTurnRightSignalThread){
+                    label4.setText("("+(i--)+"秒后自动关闭)");
+                    System.err.println("CloseTurnRightSignalThread exit："+exitCloseTurnRightSignalThread);
+                    synchronized (this) {
+                        this.wait(1000 * 1);
+                    }
+                }
+                if(exitCloseTurnRightSignalThread){
+                    return;
+                }
+                radioButton_lightTurnRightSignalOn.setEnabled(true);
+                radioButton_lightTurnLeftSignalOn.setEnabled(true);
+                buttonGroup_turnSignal.clearSelection();
+                label4.setText("");
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     // 接收消息线程
@@ -1726,6 +1793,12 @@ public class CarGui extends JFrame implements WindowListener {
     class Odometer extends Thread {
         volatile public Boolean wait = false;
         Double speed;
+        //里程
+        private Double mileage;
+        public Odometer(){
+            speed = 0D;
+            mileage = 0D;
+        }
 
         public void setSpeed(Double speed) {
             this.speed = speed;
@@ -1736,10 +1809,9 @@ public class CarGui extends JFrame implements WindowListener {
                 while (true) {
                     while (!wait) {
                         sleep(1000);
-                        Double lastL = Double.valueOf(mileageLabel.getText());
-                        lastL = lastL + speed * 1D / 3600;
+                        mileage = mileage + speed * 1D / 3600;
 
-                        mileageLabel.setText(String.format("%.2f", lastL));
+                        mileageLabel.setText(String.format("%.2f", mileage));
                     }
                 }
             } catch (Exception e) {
@@ -1751,6 +1823,14 @@ public class CarGui extends JFrame implements WindowListener {
     private void sendMessage(List<String> examItemOperationNameList, String typeName) {
         tcpResponseMessage = new TcpResponseMessage();
         tcpResponseMessage.setTypeName(typeName);
+        tcpResponseMessage.setExamItemOperationName(examItemOperationNameList);
+
+        messageTaskQueue.putMessage(tcpResponseMessage);
+    }
+    private void sendMessage(List<String> examItemOperationNameList, Map<String, String> map, String typeName) {
+        tcpResponseMessage = new TcpResponseMessage();
+        tcpResponseMessage.setTypeName(typeName);
+        tcpResponseMessage.setDataMap(map);
         tcpResponseMessage.setExamItemOperationName(examItemOperationNameList);
 
         messageTaskQueue.putMessage(tcpResponseMessage);
