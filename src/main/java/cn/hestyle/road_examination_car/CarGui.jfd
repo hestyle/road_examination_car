@@ -79,7 +79,7 @@ new FormModel {
 					"text": "右转灯"
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightTurnRightSignalOnMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-					"x": 165
+					"x": 95
 					"y": 20
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
@@ -107,20 +107,19 @@ new FormModel {
 					"y": 45
 				} )
 				add( new FormComponent( "javax.swing.JRadioButton" ) {
-					name: "radioButton_lightTurnSignalOff"
-					"text": "关闭"
-					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightTurnSignalOffClicked", true ) )
-				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-					"x": 95
-					"y": 20
-				} )
-				add( new FormComponent( "javax.swing.JRadioButton" ) {
 					name: "radioButton_lightHighDippedClose"
 					"text": "关闭"
 					addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "radioButton_lightHighDippedCloseMouseClicked", true ) )
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 					"x": 308
 					"y": 70
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label4"
+					"text": "(五秒钟后自动关闭)"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+					"x": 165
+					"y": 20
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 310

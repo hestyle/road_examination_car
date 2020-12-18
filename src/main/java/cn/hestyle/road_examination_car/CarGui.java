@@ -211,8 +211,24 @@ public class CarGui extends JFrame implements WindowListener {
             sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_lightTurnLeftSignalOn.setEnabled(false);
-            radioButton_lightTurnSignalOff.setEnabled(true);
             radioButton_lightTurnRightSignalOn.setEnabled(true);
+
+            Thread closeTurnSignalThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        synchronized (this){
+                            this.wait(1000 * 5);
+                        }
+                        radioButton_lightTurnLeftSignalOn.setEnabled(true);
+                        radioButton_lightTurnRightSignalOn.setEnabled(true);
+                        buttonGroup_turnSignal.clearSelection();
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            closeTurnSignalThread.start();
         }
     }
 
@@ -221,29 +237,45 @@ public class CarGui extends JFrame implements WindowListener {
         // TODO add your code here
         if (radioButton_lightTurnRightSignalOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
-            temp.add("TURN_ON_RIHGT_TURN_SIGNAL");
+            temp.add("TURN_ON_RIGHT_TURN_SIGNAL");
             sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             radioButton_lightTurnRightSignalOn.setEnabled(false);
-            radioButton_lightTurnSignalOff.setEnabled(true);
             radioButton_lightTurnLeftSignalOn.setEnabled(true);
+
+            Thread closeTurnSignalThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        synchronized (this){
+                            this.wait(1000 * 5);
+                        }
+                        radioButton_lightTurnLeftSignalOn.setEnabled(true);
+                        radioButton_lightTurnRightSignalOn.setEnabled(true);
+                        buttonGroup_turnSignal.clearSelection();
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            closeTurnSignalThread.start();
         }
     }
 
     // 关闭转向灯
-    private void radioButton_lightTurnSignalOffClicked(MouseEvent e) {
-        // TODO add your code here
-        if (radioButton_lightTurnSignalOff.isEnabled()) {
-            List<String> temp = new LinkedList<>();
-            temp.add("TURN_OFF_ALL_LIGHT");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
-
-            radioButton_lightTurnSignalOff.setEnabled(false);
-            radioButton_lightTurnRightSignalOn.setEnabled(true);
-            radioButton_lightTurnLeftSignalOn.setEnabled(true);
-            buttonGroup_turnSignal.clearSelection();
-        }
-    }
+//    private void radioButton_lightTurnSignalOffClicked(MouseEvent e) {
+//        // TODO add your code here
+//        if (radioButton_lightTurnSignalOff.isEnabled()) {
+//            List<String> temp = new LinkedList<>();
+//            temp.add("TURN_OFF_ALL_LIGHT");
+//            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+//
+//            radioButton_lightTurnSignalOff.setEnabled(false);
+//            radioButton_lightTurnRightSignalOn.setEnabled(true);
+//            radioButton_lightTurnLeftSignalOn.setEnabled(true);
+//            buttonGroup_turnSignal.clearSelection();
+//        }
+//    }
 
     // 雾灯
     private void radioButton_lightFogOnMouseClicked(MouseEvent e) {
@@ -292,7 +324,7 @@ public class CarGui extends JFrame implements WindowListener {
         // TODO add your code here
         buttonGroup_highDipped.clearSelection();
         buttonGroup_turnSignal.clearSelection();
-        radioButton_lightTurnSignalOff.setEnabled(false);
+//        radioButton_lightTurnSignalOff.setEnabled(false);
     }
 
     // 系安全带
@@ -565,8 +597,8 @@ public class CarGui extends JFrame implements WindowListener {
         radioButton_lightFogOn = new JRadioButton();
         radioButton_lightOutLineMarkOn = new JRadioButton();
         radioButton_lightHazardWarnOn = new JRadioButton();
-        radioButton_lightTurnSignalOff = new JRadioButton();
         radioButton_lightHighDippedClose = new JRadioButton();
+        label4 = new JLabel();
         gearPanel = new JPanel();
         radioButton_gearForward = new JRadioButton();
         radioButton_gearSecond = new JRadioButton();
@@ -687,7 +719,7 @@ public class CarGui extends JFrame implements WindowListener {
                 }
             });
             lightPanel.add(radioButton_lightTurnRightSignalOn);
-            radioButton_lightTurnRightSignalOn.setBounds(new Rectangle(new Point(165, 20), radioButton_lightTurnRightSignalOn.getPreferredSize()));
+            radioButton_lightTurnRightSignalOn.setBounds(new Rectangle(new Point(95, 20), radioButton_lightTurnRightSignalOn.getPreferredSize()));
 
             //---- radioButton_lightFogOn ----
             radioButton_lightFogOn.setText("\u96fe\u706f");
@@ -722,17 +754,6 @@ public class CarGui extends JFrame implements WindowListener {
             lightPanel.add(radioButton_lightHazardWarnOn);
             radioButton_lightHazardWarnOn.setBounds(new Rectangle(new Point(165, 45), radioButton_lightHazardWarnOn.getPreferredSize()));
 
-            //---- radioButton_lightTurnSignalOff ----
-            radioButton_lightTurnSignalOff.setText("\u5173\u95ed");
-            radioButton_lightTurnSignalOff.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    radioButton_lightTurnSignalOffClicked(e);
-                }
-            });
-            lightPanel.add(radioButton_lightTurnSignalOff);
-            radioButton_lightTurnSignalOff.setBounds(new Rectangle(new Point(95, 20), radioButton_lightTurnSignalOff.getPreferredSize()));
-
             //---- radioButton_lightHighDippedClose ----
             radioButton_lightHighDippedClose.setText("\u5173\u95ed");
             radioButton_lightHighDippedClose.addMouseListener(new MouseAdapter() {
@@ -743,6 +764,11 @@ public class CarGui extends JFrame implements WindowListener {
             });
             lightPanel.add(radioButton_lightHighDippedClose);
             radioButton_lightHighDippedClose.setBounds(new Rectangle(new Point(308, 70), radioButton_lightHighDippedClose.getPreferredSize()));
+
+            //---- label4 ----
+            label4.setText("(\u4e94\u79d2\u949f\u540e\u81ea\u52a8\u5173\u95ed)");
+            lightPanel.add(label4);
+            label4.setBounds(new Rectangle(new Point(165, 20), label4.getPreferredSize()));
         }
         contentPane.add(lightPanel);
         lightPanel.setBounds(310, 55, 435, 100);
@@ -1216,9 +1242,9 @@ public class CarGui extends JFrame implements WindowListener {
         buttonGroup_turnSignal = new ButtonGroup();
         buttonGroup_turnSignal.add(radioButton_lightTurnLeftSignalOn);
         buttonGroup_turnSignal.add(radioButton_lightTurnRightSignalOn);
-        buttonGroup_turnSignal.add(radioButton_lightTurnSignalOff);
-        buttonGroup_turnSignal.setSelected(radioButton_lightTurnSignalOff.getModel(), true);
-        radioButton_lightTurnSignalOff.setEnabled(false);
+//        buttonGroup_turnSignal.add(radioButton_lightTurnSignalOff);
+//        buttonGroup_turnSignal.setSelected(radioButton_lightTurnSignalOff.getModel(), true);
+//        radioButton_lightTurnSignalOff.setEnabled(false);
 
         // 远近灯光、交替 按钮组
         buttonGroup_highDipped = new ButtonGroup();
@@ -1319,8 +1345,8 @@ public class CarGui extends JFrame implements WindowListener {
     private JRadioButton radioButton_lightFogOn;
     private JRadioButton radioButton_lightOutLineMarkOn;
     private JRadioButton radioButton_lightHazardWarnOn;
-    private JRadioButton radioButton_lightTurnSignalOff;
     private JRadioButton radioButton_lightHighDippedClose;
+    private JLabel label4;
     private JPanel gearPanel;
     private JRadioButton radioButton_gearForward;
     private JRadioButton radioButton_gearSecond;
