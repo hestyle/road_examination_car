@@ -54,7 +54,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_clutchPedalOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_OFF_CLUTCH_PEDAL");
-            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
 
             radioButton_clutchPedalOn.setEnabled(true);
             radioButton_clutchPedalOff.setEnabled(false);
@@ -67,6 +67,9 @@ public class CarGui extends JFrame implements WindowListener {
                     odometer.wait = false;
                 }
             }
+            Map<String, String> map = new HashMap<>();
+            map.put("SPEED", "10");
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
         }
     }
 
@@ -450,7 +453,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -467,7 +470,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -484,7 +487,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -501,7 +504,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -519,7 +522,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -537,7 +540,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
@@ -555,7 +558,7 @@ public class CarGui extends JFrame implements WindowListener {
             temp.add("SET_NEUTRAL_GEAR");
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp,map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             checkGearShift();
         }
