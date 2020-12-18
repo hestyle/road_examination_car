@@ -1604,6 +1604,9 @@ public class CarGui extends JFrame implements WindowListener {
                             if(speed <= 0){
                                 odometer.setSpeed(0D);
                                 odometer.wait = true;
+                                Map<String, String> map = new HashMap<>();
+                                map.put("SPEED", "0");
+                                sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
                             }
                         }
                         speedLabel.setText(String.format("%.2f", speed));
@@ -1654,6 +1657,9 @@ public class CarGui extends JFrame implements WindowListener {
                             if(speed <= 0){
                                 odometer.setSpeed(0D);
                                 odometer.wait = true;
+                                Map<String, String> map = new HashMap<>();
+                                map.put("SPEED", "0");
+                                sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
                             }
                         }
                         speedLabel.setText(String.format("%.2f", speed));
@@ -1670,8 +1676,6 @@ public class CarGui extends JFrame implements WindowListener {
                     temp.add("SPEED:" + String.format("%.2f", speed));
                     sendMessage(temp, TcpResponseMessage.RESPONSE_BASE_STATE);
                     Double tempL = 0D;
-                    System.err.println("oldSpeed:" + oldSpeed);
-                    System.err.println("t:" + t);
                     tempL = oldSpeed * (t * 60D / 3600000) -
                             1D / 2 * (0.5D) * (t * 60D / 3600000) * (t * 60 / 3600000);
                     Double lastL = Double.valueOf(mileageLabel.getText());
@@ -1835,6 +1839,13 @@ public class CarGui extends JFrame implements WindowListener {
         tcpResponseMessage.setTypeName(typeName);
         tcpResponseMessage.setDataMap(map);
         tcpResponseMessage.setExamItemOperationName(examItemOperationNameList);
+
+        messageTaskQueue.putMessage(tcpResponseMessage);
+    }
+    private void sendMessage(Map<String, String> map, String typeName) {
+        tcpResponseMessage = new TcpResponseMessage();
+        tcpResponseMessage.setTypeName(typeName);
+        tcpResponseMessage.setDataMap(map);
 
         messageTaskQueue.putMessage(tcpResponseMessage);
     }
