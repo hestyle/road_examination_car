@@ -339,6 +339,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_safetyBeltOn.setEnabled(false);
             radioButton_safetyBeltOff.setEnabled(true);
+            buttonGroup_safetyBelt.setSelected(radioButton_safetyBeltOn.getModel(), true);
         }
     }
 
@@ -352,6 +353,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_safetyBeltOn.setEnabled(true);
             radioButton_safetyBeltOff.setEnabled(false);
+            buttonGroup_safetyBelt.setSelected(radioButton_safetyBeltOff.getModel(), true);
         }
     }
 
@@ -365,6 +367,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_doorClose.setEnabled(false);
             radioButton_doorOpen.setEnabled(true);
+            buttonGroup_door.setSelected(radioButton_doorClose.getModel(), true);
         }
     }
 
@@ -378,6 +381,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_doorClose.setEnabled(true);
             radioButton_doorOpen.setEnabled(false);
+            buttonGroup_door.setSelected(radioButton_doorOpen.getModel(), true);
         }
     }
 
@@ -391,6 +395,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_parkBrakeOn.setEnabled(false);
             radioButton_parkBrakeOff.setEnabled(true);
+            buttonGroup_parkBrake.setSelected(radioButton_parkBrakeOn.getModel(), true);
             synchronized (parkBrakeActionHandler) {
                 parkBrakeActionHandler.notify();
             }
@@ -407,6 +412,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_parkBrakeOn.setEnabled(true);
             radioButton_parkBrakeOff.setEnabled(false);
+            buttonGroup_parkBrake.setSelected(radioButton_parkBrakeOff.getModel(), true);
         }
     }
 
