@@ -1809,7 +1809,7 @@ public class CarGui extends JFrame implements WindowListener {
 
         public void run() {
             try {
-                while (socket.isClosed() == false) {
+                while (true) {
                     TcpRequestMessage tcpRequestMessage = (TcpRequestMessage) ois.readObject();
 
                     if (tcpRequestMessage.getTypeName().equals(TcpRequestMessage.REQUEST_TCP_CONNECT_CLOSE)) {
