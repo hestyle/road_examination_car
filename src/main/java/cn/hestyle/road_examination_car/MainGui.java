@@ -38,7 +38,17 @@ public class MainGui extends JFrame {
     public MainGui(Boolean startService) {
         initComponents();
         if(startService){
-            startTcpButton.doClick();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        wait(100);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    startTcpButton.doClick();
+                }
+            }).start();
         }
     }
 
