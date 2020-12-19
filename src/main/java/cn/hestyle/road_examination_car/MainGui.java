@@ -243,6 +243,7 @@ public class MainGui extends JFrame {
                 System.out.println("等待一个连接");
                 try {
                     socket = serverSocket.accept();
+                    socket.setKeepAlive(true);
                     ObjectInputStream ois = null;
                     ObjectOutputStream oos = null;
 
