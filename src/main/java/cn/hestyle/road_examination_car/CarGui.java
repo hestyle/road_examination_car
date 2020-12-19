@@ -39,6 +39,9 @@ public class CarGui extends JFrame implements WindowListener {
     //踩离合
     private void radioButton_clutchPedalOnMouseClicked(MouseEvent e) {
         // TODO add your code here
+//        if(!radioButton_clutchPedalOn.isSelected())
+//            return;
+        System.err.println("dianji 0");
         if (radioButton_clutchPedalOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_ON_CLUTCH_PEDAL");
@@ -46,13 +49,13 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_clutchPedalOn.setEnabled(false);
             radioButton_clutchPedalOff.setEnabled(true);
-        }else {
-            radioButton_clutchPedalOn.setSelected(false);
+            buttonGroup_clutch.setSelected(radioButton_clutchPedalOn.getModel(), true);
         }
     }
 
     private void radioButton_clutchPedalOffMouseClicked(MouseEvent e) {
         // TODO add your code here
+        System.err.println("dianji 1");
         if (radioButton_clutchPedalOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_OFF_CLUTCH_PEDAL");
@@ -61,6 +64,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_clutchPedalOn.setEnabled(true);
             radioButton_clutchPedalOff.setEnabled(false);
+            buttonGroup_clutch.setSelected(radioButton_clutchPedalOff.getModel(), true);
 
             if(lastGear == 1 || lastGear == -1){
                 Double speed = Double.valueOf(speedLabel.getText());
@@ -73,8 +77,6 @@ public class CarGui extends JFrame implements WindowListener {
                     sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
                 }
             }
-        }else {
-            radioButton_clutchPedalOff.setSelected(false);
         }
     }
 
@@ -97,6 +99,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_brakePedalOn.setEnabled(false);
             radioButton_brakePedalOff.setEnabled(true);
+            buttonGroup_brake.setSelected(radioButton_brakePedalOn.getModel(), true);
             synchronized (brakeActionHandler) {
                 brakeActionHandler.notify();
             }
@@ -112,6 +115,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_brakePedalOn.setEnabled(true);
             radioButton_brakePedalOff.setEnabled(false);
+            buttonGroup_brake.setSelected(radioButton_brakePedalOff.getModel(), true);
         }
     }
 
@@ -134,7 +138,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_acceleratorPedalOn.setEnabled(false);
             radioButton_acceleratorPedalOff.setEnabled(true);
-
+            buttonGroup_accelerator.setSelected(radioButton_acceleratorPedalOn.getModel(), true);
             synchronized (acceleratorActionHandler) {
                 acceleratorActionHandler.notify();
             }
@@ -151,6 +155,7 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_acceleratorPedalOn.setEnabled(true);
             radioButton_acceleratorPedalOff.setEnabled(false);
+            buttonGroup_accelerator.setSelected(radioButton_acceleratorPedalOff.getModel(), true);
 
             if (acceleratorActionHandler.isWaittingGear() || acceleratorActionHandler.isWaittingParkBrakeOff()) {
                 synchronized (acceleratorActionHandler) {
