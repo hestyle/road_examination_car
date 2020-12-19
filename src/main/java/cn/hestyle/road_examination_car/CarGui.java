@@ -41,7 +41,6 @@ public class CarGui extends JFrame implements WindowListener {
         // TODO add your code here
 //        if(!radioButton_clutchPedalOn.isSelected())
 //            return;
-        System.err.println("dianji 0");
         if (radioButton_clutchPedalOn.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_ON_CLUTCH_PEDAL");
@@ -55,7 +54,6 @@ public class CarGui extends JFrame implements WindowListener {
 
     private void radioButton_clutchPedalOffMouseClicked(MouseEvent e) {
         // TODO add your code here
-        System.err.println("dianji 1");
         if (radioButton_clutchPedalOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_OFF_CLUTCH_PEDAL");
