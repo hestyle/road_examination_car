@@ -655,22 +655,22 @@ public class CarGui extends JFrame implements WindowListener {
         //---- label3 ----
         label3.setText("\u91cc\u7a0b\uff1a");
         contentPane.add(label3);
-        label3.setBounds(new Rectangle(new Point(185, 22), label3.getPreferredSize()));
+        label3.setBounds(new Rectangle(new Point(223, 22), label3.getPreferredSize()));
 
         //---- mileageLabel ----
         mileageLabel.setText("0");
         contentPane.add(mileageLabel);
-        mileageLabel.setBounds(240, 22, 40, mileageLabel.getPreferredSize().height);
+        mileageLabel.setBounds(278, 22, 40, mileageLabel.getPreferredSize().height);
 
         //---- label2 ----
         label2.setText("km/h");
         contentPane.add(label2);
-        label2.setBounds(new Rectangle(new Point(445, 22), label2.getPreferredSize()));
+        label2.setBounds(new Rectangle(new Point(483, 22), label2.getPreferredSize()));
 
         //---- label5 ----
         label5.setText("km");
         contentPane.add(label5);
-        label5.setBounds(new Rectangle(new Point(290, 22), label5.getPreferredSize()));
+        label5.setBounds(new Rectangle(new Point(328, 22), label5.getPreferredSize()));
 
         //======== lightPanel ========
         {
@@ -877,7 +877,7 @@ public class CarGui extends JFrame implements WindowListener {
             }
         }
         contentPane.add(gearPanel);
-        gearPanel.setBounds(185, 285, 285, 145);
+        gearPanel.setBounds(274, 285, 285, 145);
 
         //======== pedalPanel ========
         {
@@ -1014,7 +1014,7 @@ public class CarGui extends JFrame implements WindowListener {
             }
         }
         contentPane.add(parkBrakePanel);
-        parkBrakePanel.setBounds(490, 335, 90, 95);
+        parkBrakePanel.setBounds(654, 335, 90, 95);
 
         //======== otherPanel ========
         {
@@ -1046,17 +1046,17 @@ public class CarGui extends JFrame implements WindowListener {
             }
         }
         contentPane.add(otherPanel);
-        otherPanel.setBounds(490, 255, 130, 55);
+        otherPanel.setBounds(614, 255, 130, 55);
 
         //---- label1 ----
         label1.setText("\u8f66\u901f\uff1a");
         contentPane.add(label1);
-        label1.setBounds(new Rectangle(new Point(345, 22), label1.getPreferredSize()));
+        label1.setBounds(new Rectangle(new Point(383, 22), label1.getPreferredSize()));
 
         //---- speedLabel ----
         speedLabel.setText("0");
         contentPane.add(speedLabel);
-        speedLabel.setBounds(395, 22, 40, speedLabel.getPreferredSize().height);
+        speedLabel.setBounds(433, 22, 40, speedLabel.getPreferredSize().height);
 
         //======== steerWheelPanel ========
         {
@@ -1071,7 +1071,7 @@ public class CarGui extends JFrame implements WindowListener {
                 }
             });
             steerWheelPanel.add(button_steerWheelSlightTurnLeft);
-            button_steerWheelSlightTurnLeft.setBounds(new Rectangle(new Point(175, 27), button_steerWheelSlightTurnLeft.getPreferredSize()));
+            button_steerWheelSlightTurnLeft.setBounds(new Rectangle(new Point(193, 27), button_steerWheelSlightTurnLeft.getPreferredSize()));
 
             //---- button_steerWheelModerateTurnLeft ----
             button_steerWheelModerateTurnLeft.setText("\u5de6\u8f6c\u7ea6\u4e00\u5708(15\u00b0~45\u00b0)");
@@ -1082,7 +1082,7 @@ public class CarGui extends JFrame implements WindowListener {
                 }
             });
             steerWheelPanel.add(button_steerWheelModerateTurnLeft);
-            button_steerWheelModerateTurnLeft.setBounds(new Rectangle(new Point(10, 27), button_steerWheelModerateTurnLeft.getPreferredSize()));
+            button_steerWheelModerateTurnLeft.setBounds(new Rectangle(new Point(28, 27), button_steerWheelModerateTurnLeft.getPreferredSize()));
 
             //---- button_steerWheelSlightTurnRight ----
             button_steerWheelSlightTurnRight.setText("\u53f3\u8f6c\u7ea6\u534a\u5708(0\u00b0~15\u00b0)");
@@ -1093,7 +1093,7 @@ public class CarGui extends JFrame implements WindowListener {
                 }
             });
             steerWheelPanel.add(button_steerWheelSlightTurnRight);
-            button_steerWheelSlightTurnRight.setBounds(new Rectangle(new Point(360, 27), button_steerWheelSlightTurnRight.getPreferredSize()));
+            button_steerWheelSlightTurnRight.setBounds(new Rectangle(new Point(394, 27), button_steerWheelSlightTurnRight.getPreferredSize()));
 
             //---- button_steerWheelModerateTurnRight ----
             button_steerWheelModerateTurnRight.setText("\u53f3\u8f6c\u7ea6\u4e00\u5708(15\u00b0~45\u00b0)");
@@ -1104,7 +1104,7 @@ public class CarGui extends JFrame implements WindowListener {
                 }
             });
             steerWheelPanel.add(button_steerWheelModerateTurnRight);
-            button_steerWheelModerateTurnRight.setBounds(new Rectangle(new Point(520, 27), button_steerWheelModerateTurnRight.getPreferredSize()));
+            button_steerWheelModerateTurnRight.setBounds(new Rectangle(new Point(554, 27), button_steerWheelModerateTurnRight.getPreferredSize()));
 
             { // compute preferred size
                 Dimension preferredSize = new Dimension();
@@ -1209,7 +1209,7 @@ public class CarGui extends JFrame implements WindowListener {
         contentPane.add(doorPanel);
         doorPanel.setBounds(10, 355, 145, 75);
 
-        contentPane.setPreferredSize(new Dimension(780, 465));
+        contentPane.setPreferredSize(new Dimension(755, 465));
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
