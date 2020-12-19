@@ -470,7 +470,7 @@ public class CarGui extends JFrame implements WindowListener {
             nextGearButton = radioButton_gearForward;
 
             List<String> temp = new LinkedList<>();
-            temp.add("SET_NEUTRAL_GEAR");
+            temp.add("SET_FORWARD_GEAR");
             sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             Map<String, String> map = new HashMap<>();
@@ -489,7 +489,7 @@ public class CarGui extends JFrame implements WindowListener {
             nextGearButton = radioButton_gearSecond;
 
             List<String> temp = new LinkedList<>();
-            temp.add("SET_NEUTRAL_GEAR");
+            temp.add("SET_SECOND_GEAR");
             sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             Map<String, String> map = new HashMap<>();
@@ -508,7 +508,7 @@ public class CarGui extends JFrame implements WindowListener {
             nextGearButton = radioButton_gearThird;
 
             List<String> temp = new LinkedList<>();
-            temp.add("SET_NEUTRAL_GEAR");
+            temp.add("SET_THIRD_GEAR");
             sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             Map<String, String> map = new HashMap<>();
@@ -528,7 +528,7 @@ public class CarGui extends JFrame implements WindowListener {
 
 
             List<String> temp = new LinkedList<>();
-            temp.add("SET_NEUTRAL_GEAR");
+            temp.add("SET_FOURTH_GEAR");
             sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             Map<String, String> map = new HashMap<>();
@@ -548,7 +548,7 @@ public class CarGui extends JFrame implements WindowListener {
 
 
             List<String> temp = new LinkedList<>();
-            temp.add("SET_NEUTRAL_GEAR");
+            temp.add("SET_FIFTH_GEAR");
             sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             Map<String, String> map = new HashMap<>();
@@ -568,7 +568,7 @@ public class CarGui extends JFrame implements WindowListener {
 
 
             List<String> temp = new LinkedList<>();
-            temp.add("SET_NEUTRAL_GEAR");
+            temp.add("SET_REVERSE_GEAR");
             sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
             Map<String, String> map = new HashMap<>();
@@ -1361,7 +1361,7 @@ public class CarGui extends JFrame implements WindowListener {
     private JRadioButton radioButton_brakePedalOn;
     private JRadioButton radioButton_brakePedalOff;
     private JPanel acceleratorPedalPanel;
-    volatile private JRadioButton radioButton_acceleratorPedalOn;
+    private JRadioButton radioButton_acceleratorPedalOn;
     private JRadioButton radioButton_acceleratorPedalOff;
     private JPanel parkBrakePanel;
     private JRadioButton radioButton_parkBrakeOn;
