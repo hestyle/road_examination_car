@@ -54,6 +54,7 @@ public class CarGui extends JFrame implements WindowListener {
         if (radioButton_clutchPedalOff.isEnabled()) {
             List<String> temp = new LinkedList<>();
             temp.add("STEP_OFF_CLUTCH_PEDAL");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
 
 
             radioButton_clutchPedalOn.setEnabled(true);
@@ -69,7 +70,7 @@ public class CarGui extends JFrame implements WindowListener {
             }
             Map<String, String> map = new HashMap<>();
             map.put("SPEED", "10");
-            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
         }
     }
 
@@ -451,9 +452,11 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             checkGearShift();
         }
@@ -468,9 +471,11 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             checkGearShift();
         }
@@ -485,9 +490,11 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             checkGearShift();
         }
@@ -502,9 +509,11 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             checkGearShift();
         }
@@ -520,9 +529,11 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             checkGearShift();
         }
@@ -538,9 +549,11 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             checkGearShift();
         }
@@ -556,9 +569,11 @@ public class CarGui extends JFrame implements WindowListener {
 
             List<String> temp = new LinkedList<>();
             temp.add("SET_NEUTRAL_GEAR");
+            sendMessage(temp, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+
             Map<String, String> map = new HashMap<>();
             map.put("SPEED",speedLabel.getText());
-            sendMessage(temp, map, TcpResponseMessage.RESPONSE_OPERATION_NAME);
+            sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
 
             checkGearShift();
         }
@@ -1346,7 +1361,7 @@ public class CarGui extends JFrame implements WindowListener {
     private JRadioButton radioButton_brakePedalOn;
     private JRadioButton radioButton_brakePedalOff;
     private JPanel acceleratorPedalPanel;
-    private JRadioButton radioButton_acceleratorPedalOn;
+    volatile private JRadioButton radioButton_acceleratorPedalOn;
     private JRadioButton radioButton_acceleratorPedalOff;
     private JPanel parkBrakePanel;
     private JRadioButton radioButton_parkBrakeOn;
@@ -1522,8 +1537,21 @@ public class CarGui extends JFrame implements WindowListener {
                     Integer t = 0;
                     Double oldSpeed = Double.valueOf(speedLabel.getText());
                     odometer.wait = true;
+                    boolean firstMax = true;
                     while (radioButton_acceleratorPedalOn.isEnabled() == false) { //踩加速踏板状态
                         if (radioButton_gearNeutral.isEnabled() && radioButton_parkBrakeOn.isEnabled()) { // 挂了挡，没拉手刹
+                            if(t >= 20){
+                                if(firstMax){
+                                    Map<String, String> map = new HashMap<>();
+                                    map.put("SPEED", String.valueOf(speed));
+                                    sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
+
+                                    odometer.setSpeed(speed);
+                                    odometer.wait = false;
+                                    firstMax = false;
+                                }
+                                continue;
+                            }
                             speed = Double.valueOf(speedLabel.getText());
                             speed += 0.5;
                             speedLabel.setText(String.format("%.2f", speed));
