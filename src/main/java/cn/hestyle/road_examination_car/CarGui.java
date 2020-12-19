@@ -46,6 +46,8 @@ public class CarGui extends JFrame implements WindowListener {
 
             radioButton_clutchPedalOn.setEnabled(false);
             radioButton_clutchPedalOff.setEnabled(true);
+        }else {
+            radioButton_clutchPedalOn.setSelected(false);
         }
     }
 
@@ -66,11 +68,13 @@ public class CarGui extends JFrame implements WindowListener {
                     speedLabel.setText("10");
                     odometer.setSpeed(10D);
                     odometer.wait = false;
+                    Map<String, String> map = new HashMap<>();
+                    map.put("SPEED", "10");
+                    sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
                 }
             }
-            Map<String, String> map = new HashMap<>();
-            map.put("SPEED", "10");
-            sendMessage(map, TcpResponseMessage.RESPONSE_BASE_STATE);
+        }else {
+            radioButton_clutchPedalOff.setSelected(false);
         }
     }
 
@@ -1204,6 +1208,8 @@ public class CarGui extends JFrame implements WindowListener {
         // 设置窗体右上角关闭
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        //
+
         // 离合器panel绘制边框
         clutchPedalPanel.setBorder(BorderFactory.createTitledBorder("离合器踏板"));
         // 离合器状态按钮组
@@ -1734,7 +1740,6 @@ public class CarGui extends JFrame implements WindowListener {
                 int i = 5;
                 while (i>0 && !exitCloseTurnLeftSignalThread){
                     label4.setText("("+(i--)+"秒后自动关闭)");
-                    System.err.println("CloseTurnLeftSignalThread exit："+exitCloseTurnLeftSignalThread);
                     synchronized (this) {
                         this.wait(1000 * 1);
                     }
@@ -1760,7 +1765,6 @@ public class CarGui extends JFrame implements WindowListener {
                 int i = 5;
                 while (i>0 && !exitCloseTurnRightSignalThread){
                     label4.setText("("+(i--)+"秒后自动关闭)");
-                    System.err.println("CloseTurnRightSignalThread exit："+exitCloseTurnRightSignalThread);
                     synchronized (this) {
                         this.wait(1000 * 1);
                     }
