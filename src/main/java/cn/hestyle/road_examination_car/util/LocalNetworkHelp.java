@@ -8,6 +8,7 @@ import java.util.Enumeration;
 
 public class LocalNetworkHelp {
     private static final String WINDOWS_LOCAL_NETWORK_WLAN = "wlan";
+    private static final String MAC_OS_LOCAL_NETWORK_WLAN = "en1";
 
     /**
      * 获取本地网络的ip地址（局域网ip，wlan无线网卡
@@ -22,6 +23,8 @@ public class LocalNetworkHelp {
             e.printStackTrace();
             return null;
         }
+        // 获取系统类型
+        String osName = System.getProperty("os.name");
         while (networkInterfaceEnumeration.hasMoreElements()) {
             NetworkInterface networkInterface = networkInterfaceEnumeration.nextElement();
             // 获得与该网络接口绑定的 IP 地址，一般只有一个
@@ -29,8 +32,14 @@ public class LocalNetworkHelp {
             while (addressEnumeration.hasMoreElements()) {
                 InetAddress address = addressEnumeration.nextElement();
                 // 至需要ipv4
-                if (address instanceof Inet4Address && networkInterface.getName().startsWith(LocalNetworkHelp.WINDOWS_LOCAL_NETWORK_WLAN)) {
-                    return address.getHostAddress();
+                if (address instanceof Inet4Address) {
+                    if (osName.startsWith("Windows") && networkInterface.getName().startsWith(LocalNetworkHelp.WINDOWS_LOCAL_NETWORK_WLAN)) {
+                        // Windows
+                        return address.getHostAddress();
+                    } else if (osName.startsWith("Mac OS") && networkInterface.getName().startsWith(LocalNetworkHelp.MAC_OS_LOCAL_NETWORK_WLAN)) {
+                        // mac os
+                        return address.getHostAddress();
+                    }
                 }
             }
         }
